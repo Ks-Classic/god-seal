@@ -8,3 +8,8 @@ __pycache__/
 
 # OS
 .DS_Store
+# reports: keep only chart HTML + interpretation.json + benchmarks
+reports/*
+!reports/kohata_yasuhiko_chart.html
+!reports/kohata_yasuhiko_interpretation.json
+!reports/oss_extraction_benchmark.json
