@@ -1,0 +1,182 @@
+{
+  "source_images": {
+    "sample_chart": "63e3adbd-6e19-4c05-ac9f-1c9714fece98.jpg",
+    "maria_positions": "340f267d-e43d-4aab-8ddc-ac6871f35d5e.jpg",
+    "source_code": "6470a554-fdab-496e-ac99-b6c11516df32.jpg",
+    "compile_steps": "66a85bf8-6315-4e58-af5d-a5415b94c93c.jpg"
+  },
+  "code_rule": {
+    "ingod": "大きい円に刻まれた番号",
+    "vector": "小さい円に刻まれた番号",
+    "notation": "InGod.Vector"
+  },
+  "maria": [
+    {
+      "position_id": "A",
+      "planet": "太陽",
+      "source_label": "太陽の恩恵",
+      "title": "突出した個性で世界をつかむ",
+      "role": "ゲームジャンル",
+      "role_description": "どんなゲームか。戦闘？レース？育成？パズル？"
+    },
+    {
+      "position_id": "B",
+      "planet": "地球",
+      "source_label": "地球の恩恵",
+      "title": "これを使い欲しい物を得る",
+      "role": "コントローラー",
+      "role_description": "ゲームを進めるための操作方法"
+    },
+    {
+      "position_id": "C",
+      "planet": "月",
+      "source_label": "月の恩恵",
+      "title": "これを解決せずに進む",
+      "role": "ストーリー",
+      "role_description": "ゲームの背景にある前世の物語"
+    },
+    {
+      "position_id": "D",
+      "planet": "水星",
+      "source_label": "水星の恩恵",
+      "title": "これを自慢する",
+      "role": "情報収集",
+      "role_description": "村人や敵から有効な情報を入手するための手段"
+    },
+    {
+      "position_id": "E",
+      "planet": "金星",
+      "source_label": "金星の恩恵",
+      "title": "これでモテ嫉妬される",
+      "role": "ドロップアイテム",
+      "role_description": "怪獣をやっつけたら最後にもらえる宝物"
+    },
+    {
+      "position_id": "F",
+      "planet": "火星",
+      "source_label": "火星の恩恵",
+      "title": "これでオンリーワンタイトルをとる",
+      "role": "必殺スキル",
+      "role_description": "コインが貯まると打てる必殺技"
+    },
+    {
+      "position_id": "G",
+      "planet": "木星",
+      "source_label": "木星の恩恵",
+      "title": "これを楽に使って儲かる",
+      "role": "ボーナスステージ",
+      "role_description": "努力やリスクなしに望みをゲットできる"
+    },
+    {
+      "position_id": "H",
+      "planet": "土星",
+      "source_label": "土星の恩恵",
+      "title": "嫌だいやだと吹聴する",
+      "role": "経験コイン",
+      "role_description": "コツコツと目の前の敵を倒していると貯まっている"
+    },
+    {
+      "position_id": "I",
+      "planet": "天王星",
+      "source_label": "天王星の恩恵",
+      "title": "これでエネルギーをためる",
+      "role": "回復魔法",
+      "role_description": "パワーゲージを回復させるための方法"
+    },
+    {
+      "position_id": "J",
+      "planet": "海王星",
+      "source_label": "海王星の恩恵",
+      "title": "わたしはこれの神である",
+      "role": "チート",
+      "role_description": "ちょっと卑怯なほど無敵になる手段"
+    },
+    {
+      "position_id": "K",
+      "planet": "冥王星",
+      "source_label": "冥王星の恩恵",
+      "title": "これで生産レイヤーがあがる",
+      "role": "レベルアップ",
+      "role_description": "ある基準が整ったとき、これを使ってレベルアップする"
+    }
+  ],
+  "face": [
+    {
+      "position_id": "A",
+      "planet": "太陽",
+      "source_label": "太陽",
+      "role": "テーマ・ジャンル・タイトル",
+      "role_description": "この物語が伝えたいテーマ"
+    },
+    {
+      "position_id": "B",
+      "planet": "地球",
+      "source_label": "地球",
+      "role": "タイトル",
+      "role_description": "地球をあらわすタイトル"
+    },
+    {
+      "position_id": "C",
+      "planet": "月",
+      "source_label": "月",
+      "role": "はじまりのシーン",
+      "role_description": "はじまりのシーン"
+    },
+    {
+      "position_id": "D",
+      "planet": "水星",
+      "source_label": "水星",
+      "role": "決め台詞",
+      "role_description": "この物語が伝えたいテーマと決め台詞"
+    },
+    {
+      "position_id": "E",
+      "planet": "金星",
+      "source_label": "金星",
+      "role": "主人公の魅力",
+      "role_description": "物語の主人公の魅力"
+    },
+    {
+      "position_id": "F",
+      "planet": "火星",
+      "source_label": "火星",
+      "role": "勝つための力",
+      "role_description": "主人公が持つ、勝つための力"
+    },
+    {
+      "position_id": "G",
+      "planet": "木星",
+      "source_label": "木星",
+      "role": "物語の見どころ",
+      "role_description": "ドキドキハラハラする物語の見どころ"
+    },
+    {
+      "position_id": "H",
+      "planet": "土星",
+      "source_label": "土星",
+      "role": "観客を惹きつける装飾",
+      "role_description": "観客を惹きつける物語の装飾"
+    },
+    {
+      "position_id": "I",
+      "planet": "天王星",
+      "source_label": "天王星",
+      "role": "魂が選んだ動機",
+      "role_description": "この物語を魂が選んだ動機"
+    },
+    {
+      "position_id": "J",
+      "planet": "海王星",
+      "source_label": "海王星",
+      "role": "主演映画",
+      "role_description": "これまで地球に来て演じた主演映画"
+    },
+    {
+      "position_id": "K",
+      "planet": "冥王星",
+      "source_label": "冥王星",
+      "role": "ナレーション・神通力",
+      "role_description": "物語を俯瞰した位置からの説明"
+    }
+  ]
+}

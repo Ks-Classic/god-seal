@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GOD SEAL — Interpretation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #06060a;
+  --bg-2: #0c0c14;
+  --ink: #ece8df;
+  --ink-dim: #9a978f;
+  --line: rgba(180,176,166,0.14);
+  --maria: #e9c980;        /* warm gold — light algorithm */
+  --maria-soft: rgba(233,201,128,0.16);
+  --face: #9fc7e8;         /* cool silver-blue — dark algorithm */
+  --face-soft: rgba(159,199,232,0.16);
+  --panel: rgba(18,18,26,0.72);
+  --serif: "Cormorant Garamond", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --sans: "Zen Kaku Gothic New", system-ui, "Hiragino Sans", sans-serif;
+  --read: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); }
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(1100px 700px at 18% -8%, rgba(233,201,128,0.07), transparent 60%),
+    radial-gradient(1000px 720px at 86% 4%, rgba(159,199,232,0.08), transparent 62%),
+    radial-gradient(900px 900px at 50% 120%, rgba(120,90,200,0.06), transparent 60%),
+    var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.5;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/></svg>");
+  mix-blend-mode: overlay;
+}
+.wrap { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: clamp(28px, 5vw, 64px) clamp(18px, 4vw, 48px) 120px; }
+
+header.masthead { text-align: center; margin-bottom: clamp(28px, 5vw, 56px); }
+.eyebrow { font-family: var(--sans); font-weight: 300; letter-spacing: 0.42em; text-transform: uppercase;
+  font-size: 11px; color: var(--ink-dim); }
+.wordmark { font-family: var(--serif); font-weight: 600; letter-spacing: 0.16em;
+  font-size: clamp(40px, 8vw, 84px); line-height: 0.96; margin: 10px 0 6px; }
+.wordmark .seal { display: inline-block; padding: 0 0.12em; }
+.subject { font-family: var(--serif); font-style: italic; font-size: clamp(18px, 2.4vw, 26px); color: var(--ink); }
+.subject small { font-style: normal; font-family: var(--sans); font-weight: 300; color: var(--ink-dim); letter-spacing: 0.2em; font-size: 12px; display: block; margin-top: 8px; }
+
+.stage { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 40px); align-items: start; }
+@media (max-width: 880px) { .stage { grid-template-columns: 1fr; } }
+
+.algo { position: relative; border: 1px solid var(--line); border-radius: 18px; padding: 22px 14px 30px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0)); overflow: hidden; }
+.algo[data-algo="face"] { background: linear-gradient(180deg, rgba(0,0,0,0.34), rgba(0,0,0,0.12)); }
+.algo-head { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 6px; }
+.algo-head .k { font-family: var(--sans); font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase;
+  font-size: 10px; color: var(--ink-dim); }
+.algo-head .n { font-family: var(--serif); font-size: clamp(30px, 4.4vw, 48px); font-weight: 500; letter-spacing: 0.04em; }
+.algo[data-algo="maria"] .algo-head .n { color: var(--maria); }
+.algo[data-algo="face"] .algo-head .n { color: var(--face); }
+.algo-note { text-align: center; font-size: 11px; color: var(--ink-dim); letter-spacing: 0.12em; margin-bottom: 8px; }
+
+.tree { width: 100%; height: auto; display: block; overflow: visible; }
+.tree .edges line { stroke: var(--line); stroke-width: 1; }
+.tree[data-algo="maria"] .edges line { stroke: rgba(233,201,128,0.18); }
+.tree[data-algo="face"] .edges line { stroke: rgba(159,199,232,0.18); }
+
+.node { cursor: pointer; outline: none; opacity: 0; transform-box: fill-box;
+  animation: ignite 0.6s var(--ease) forwards; animation-delay: calc(var(--i) * 70ms + 200ms); }
+@keyframes ignite { from { opacity: 0; } to { opacity: 1; } }
+.node .halo { fill: transparent; opacity: 0; transition: opacity 0.35s var(--ease); }
+.node .ring { fill: none; stroke-width: 1.4; transition: stroke 0.3s, stroke-width 0.3s; }
+.node .disc { transition: fill 0.3s; }
+.tree[data-algo="maria"] .ring { stroke: rgba(233,201,128,0.62); }
+.tree[data-algo="maria"] .disc { fill: #14120c; }
+.tree[data-algo="maria"] .halo { fill: var(--maria); }
+.tree[data-algo="face"] .ring { stroke: rgba(159,199,232,0.62); }
+.tree[data-algo="face"] .disc { fill: #0a0e14; }
+.tree[data-algo="face"] .halo { fill: var(--face); }
+.node text { text-anchor: middle; dominant-baseline: middle; pointer-events: none; fill: var(--ink); font-family: var(--serif); }
+.node .ingod { font-size: 24px; font-weight: 600; }
+.node .vector { font-size: 12px; font-weight: 500; fill: var(--ink-dim); font-family: var(--sans); }
+.node .glyph { font-size: 13px; fill: var(--ink-dim); font-family: var(--serif); }
+
+.node:hover .halo, .node:focus-visible .halo { opacity: 0.18; }
+.node:hover .ring, .node:focus-visible .ring { stroke-width: 2; }
+.tree[data-algo="maria"] .node:hover .ring, .tree[data-algo="maria"] .node:focus-visible .ring { stroke: var(--maria); }
+.tree[data-algo="face"] .node:hover .ring, .tree[data-algo="face"] .node:focus-visible .ring { stroke: var(--face); }
+.node.is-active .halo { opacity: 0.28; }
+.node.is-active .ring { stroke-width: 2.4; }
+.tree[data-algo="maria"] .node.is-active .ring { stroke: var(--maria); }
+.tree[data-algo="face"] .node.is-active .ring { stroke: var(--face); }
+
+/* detail drawer */
+.detail { position: fixed; z-index: 20; top: 0; right: 0; height: 100vh; width: min(440px, 92vw);
+  background: var(--panel); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-left: 1px solid var(--line); box-shadow: -30px 0 80px rgba(0,0,0,0.5);
+  transform: translateX(100%); transition: transform 0.5s var(--ease); overflow-y: auto;
+  padding: 30px 28px 60px; }
+.detail.open { transform: translateX(0); }
+.detail .close { position: absolute; top: 18px; right: 18px; background: none; border: 1px solid var(--line);
+  color: var(--ink-dim); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 16px;
+  transition: color 0.2s, border-color 0.2s; }
+.detail .close:hover { color: var(--ink); border-color: var(--ink-dim); }
+.d-accent { font-family: var(--sans); font-weight: 300; letter-spacing: 0.3em; text-transform: uppercase; font-size: 10px; }
+.detail[data-algo="maria"] .d-accent { color: var(--maria); }
+.detail[data-algo="face"] .d-accent { color: var(--face); }
+.d-glyph { font-family: var(--serif); font-size: 40px; line-height: 1; margin: 6px 0 2px; }
+.detail[data-algo="maria"] .d-glyph { color: var(--maria); }
+.detail[data-algo="face"] .d-glyph { color: var(--face); }
+.d-planet { font-family: var(--serif); font-size: 30px; font-weight: 500; letter-spacing: 0.04em; }
+.d-role { font-size: 13px; color: var(--ink-dim); margin-top: 2px; letter-spacing: 0.08em; }
+.d-roledesc { font-size: 13px; color: var(--ink); margin-top: 10px; line-height: 1.7;
+  padding: 10px 14px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--line); }
+.d-title { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink); margin-top: 16px; }
+
+.d-rule { height: 1px; background: var(--line); margin: 22px 0 18px; }
+.d-code { display: flex; align-items: baseline; gap: 10px; }
+.d-code .num { font-family: var(--serif); font-size: 34px; font-weight: 600; }
+.d-code .hex { font-family: var(--serif); font-size: 22px; }
+.d-reading { font-size: 12px; color: var(--ink-dim); letter-spacing: 0.1em; margin-top: 2px; }
+.d-label { display: inline-block; margin-top: 12px; font-size: 12px; letter-spacing: 0.14em;
+  padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink); }
+.d-keywords { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.d-keywords span { font-size: 11px; color: var(--ink-dim); padding: 4px 10px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); }
+.d-section-k { font-family: var(--sans); font-weight: 300; letter-spacing: 0.28em; text-transform: uppercase;
+  font-size: 10px; color: var(--ink-dim); margin: 22px 0 10px; }
+.d-body { font-family: var(--read); font-size: 15px; line-height: 1.95; color: #f1ede4;
+  white-space: pre-wrap; word-break: auto-phrase; overflow-wrap: anywhere; letter-spacing: 0.01em; }
+.d-body .lead { display: block; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+
+.d-source { margin-top: 24px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.d-source .lab { font-family: var(--sans); font-weight: 300; letter-spacing: 0.06em; font-size: 11px; color: var(--ink-dim); }
+.src-toggle { font-family: var(--sans); font-size: 11px; letter-spacing: 0.08em; color: var(--ink);
+  background: rgba(255,255,255,0.04); border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 13px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+.src-toggle:hover { border-color: var(--ink-dim); background: rgba(255,255,255,0.07); }
+.detail[data-algo="maria"] .src-toggle:hover { border-color: var(--maria); }
+.detail[data-algo="face"] .src-toggle:hover { border-color: var(--face); }
+.src-original { display: none; margin-top: 14px; }
+.src-original.open { display: block; animation: srcReveal 0.4s var(--ease); }
+@keyframes srcReveal { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+.src-original .pdf-link { display: inline-flex; align-items: center; gap: 7px; font-family: var(--sans);
+  font-size: 11px; letter-spacing: 0.06em; color: var(--ink); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; margin-bottom: 12px; transition: border-color 0.2s; }
+.src-original .pdf-link:hover { border-color: var(--ink-dim); }
+.src-original .raw { font-family: var(--sans); font-size: 11.5px; line-height: 1.7; color: var(--ink-dim);
+  white-space: pre-wrap; max-height: 320px; overflow-y: auto; padding: 12px 14px; border-radius: 10px;
+  background: rgba(0,0,0,0.32); border: 1px solid var(--line); }
+.src-original .raw-note { font-size: 10px; color: var(--ink-dim); opacity: 0.7; margin: 8px 2px 0; letter-spacing: 0.04em; }
+.d-warn { margin-top: 14px; font-size: 11px; color: #e7b86a; border: 1px solid rgba(231,184,106,0.3);
+  border-radius: 8px; padding: 8px 12px; }
+
+.hint { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 10;
+  font-size: 11px; letter-spacing: 0.2em; color: var(--ink-dim); text-transform: uppercase;
+  padding: 8px 18px; border: 1px solid var(--line); border-radius: 999px; background: rgba(10,10,16,0.6);
+  backdrop-filter: blur(8px); transition: opacity 0.4s; }
+.hint.hide { opacity: 0; pointer-events: none; }
+.scrim { position: fixed; inset: 0; z-index: 15; background: rgba(2,2,6,0.4); opacity: 0;
+  pointer-events: none; transition: opacity 0.4s; }
+.scrim.show { opacity: 1; pointer-events: auto; }
+
+footer { text-align: center; margin-top: 60px; font-size: 10px; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--ink-dim); }
+
+@media (prefers-reduced-motion: reduce) {
+  .node { animation: none; opacity: 1; }
+  .detail, .node .ring, .node .halo, .scrim, .hint { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">Star Navigation System · Moonshot Incarnation Interface</div>
+    <h1 class="wordmark"><span class="seal">GOD&nbsp;SEAL</span></h1>
+    <div class="subject">木幡 靖彦 <small>SOURCE · YasuhikoKohata.jpg</small></div>
+  </header>
+
+  <main class="stage">
+    <section class="algo" data-algo="maria">
+      <div class="algo-head"><span class="k">Algorithm</span><span class="n">Maria</span></div>
+      <div class="algo-note">才能の戦略 — どう世界をプレイするか</div>
+      <svg class="tree" data-algo="maria" viewBox="0 0 320 560" role="group" aria-label="Algorithm maria のツリー"><g class="edges"><line x1="160" y1="46" x2="160" y2="112" /><line x1="160" y1="112" x2="160" y2="244" /><line x1="160" y1="244" x2="160" y2="376" /><line x1="160" y1="376" x2="160" y2="508" /><line x1="160" y1="112" x2="78" y2="178" /><line x1="160" y1="112" x2="242" y2="178" /><line x1="78" y1="178" x2="160" y2="244" /><line x1="242" y1="178" x2="160" y2="244" /><line x1="160" y1="244" x2="78" y2="310" /><line x1="160" y1="244" x2="242" y2="310" /><line x1="78" y1="310" x2="160" y2="376" /><line x1="242" y1="310" x2="160" y2="376" /><line x1="160" y1="376" x2="78" y2="442" /><line x1="160" y1="376" x2="242" y2="442" /><line x1="78" y1="442" x2="160" y2="508" /><line x1="242" y1="442" x2="160" y2="508" /><line x1="78" y1="178" x2="78" y2="310" /><line x1="78" y1="310" x2="78" y2="442" /><line x1="242" y1="178" x2="242" y2="310" /><line x1="242" y1="310" x2="242" y2="442" /></g><g class="nodes"><g class="node" tabindex="0" role="button" aria-label="地球 コントローラー 17.4" data-algo="maria" data-pid="B" style="--i:0" transform="translate(160,46)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">⊕</text><text class="ingod" y="-2">17</text><text class="vector" y="15">4</text></g><g class="node" tabindex="0" role="button" aria-label="月 ストーリー 19.6" data-algo="maria" data-pid="C" style="--i:1" transform="translate(160,112)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">☽</text><text class="ingod" y="-2">19</text><text class="vector" y="15">6</text></g><g class="node" tabindex="0" role="button" aria-label="金星 ドロップアイテム 46.1" data-algo="maria" data-pid="E" style="--i:2" transform="translate(78,178)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♀</text><text class="ingod" y="-2">46</text><text class="vector" y="15">1</text></g><g class="node" tabindex="0" role="button" aria-label="水星 情報収集 47.5" data-algo="maria" data-pid="D" style="--i:3" transform="translate(242,178)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">☿</text><text class="ingod" y="-2">47</text><text class="vector" y="15">5</text></g><g class="node" tabindex="0" role="button" aria-label="太陽 ゲームジャンル 18.4" data-algo="maria" data-pid="A" style="--i:4" transform="translate(160,244)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">☉</text><text class="ingod" y="-2">18</text><text class="vector" y="15">4</text></g><g class="node" tabindex="0" role="button" aria-label="木星 ボーナスステージ 33.1" data-algo="maria" data-pid="G" style="--i:5" transform="translate(78,310)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♃</text><text class="ingod" y="-2">33</text><text class="vector" y="15">1</text></g><g class="node" tabindex="0" role="button" aria-label="火星 必殺スキル 35.1" data-algo="maria" data-pid="F" style="--i:6" transform="translate(242,310)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♂</text><text class="ingod" y="-2">35</text><text class="vector" y="15">1</text></g><g class="node" tabindex="0" role="button" aria-label="冥王星 レベルアップ 1.4" data-algo="maria" data-pid="K" style="--i:7" transform="translate(160,376)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♇</text><text class="ingod" y="-2">1</text><text class="vector" y="15">4</text></g><g class="node" tabindex="0" role="button" aria-label="天王星 回復魔法 58.2" data-algo="maria" data-pid="I" style="--i:8" transform="translate(78,442)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♅</text><text class="ingod" y="-2">58</text><text class="vector" y="15">2</text></g><g class="node" tabindex="0" role="button" aria-label="土星 経験コイン 54.4" data-algo="maria" data-pid="H" style="--i:9" transform="translate(242,442)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♄</text><text class="ingod" y="-2">54</text><text class="vector" y="15">4</text></g><g class="node" tabindex="0" role="button" aria-label="海王星 チート 38.3" data-algo="maria" data-pid="J" style="--i:10" transform="translate(160,508)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♆</text><text class="ingod" y="-2">38</text><text class="vector" y="15">3</text></g></g></svg>
+    </section>
+    <section class="algo" data-algo="face">
+      <div class="algo-head"><span class="k">Algorithm</span><span class="n">Face</span></div>
+      <div class="algo-note">他者から見える物語 — どう演じられるか</div>
+      <svg class="tree" data-algo="face" viewBox="0 0 320 560" role="group" aria-label="Algorithm face のツリー"><g class="edges"><line x1="160" y1="46" x2="160" y2="178" /><line x1="160" y1="178" x2="160" y2="310" /><line x1="160" y1="310" x2="160" y2="442" /><line x1="160" y1="442" x2="160" y2="508" /><line x1="160" y1="46" x2="78" y2="112" /><line x1="160" y1="46" x2="242" y2="112" /><line x1="78" y1="112" x2="160" y2="178" /><line x1="242" y1="112" x2="160" y2="178" /><line x1="160" y1="178" x2="78" y2="244" /><line x1="160" y1="178" x2="242" y2="244" /><line x1="78" y1="244" x2="160" y2="310" /><line x1="242" y1="244" x2="160" y2="310" /><line x1="160" y1="310" x2="78" y2="376" /><line x1="160" y1="310" x2="242" y2="376" /><line x1="78" y1="376" x2="160" y2="442" /><line x1="242" y1="376" x2="160" y2="442" /><line x1="78" y1="112" x2="78" y2="244" /><line x1="78" y1="244" x2="78" y2="376" /><line x1="242" y1="112" x2="242" y2="244" /><line x1="242" y1="244" x2="242" y2="376" /></g><g class="nodes"><g class="node" tabindex="0" role="button" aria-label="海王星 主演映画 37.5" data-algo="face" data-pid="J" style="--i:0" transform="translate(160,46)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♆</text><text class="ingod" y="-2">37</text><text class="vector" y="15">5</text></g><g class="node" tabindex="0" role="button" aria-label="土星 観客を惹きつける装飾 62.3" data-algo="face" data-pid="H" style="--i:1" transform="translate(78,112)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♄</text><text class="ingod" y="-2">62</text><text class="vector" y="15">3</text></g><g class="node" tabindex="0" role="button" aria-label="天王星 魂が選んだ動機 57.4" data-algo="face" data-pid="I" style="--i:2" transform="translate(242,112)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♅</text><text class="ingod" y="-2">57</text><text class="vector" y="15">4</text></g><g class="node" tabindex="0" role="button" aria-label="冥王星 ナレーション・神通力 2.3" data-algo="face" data-pid="K" style="--i:3" transform="translate(160,178)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♇</text><text class="ingod" y="-2">2</text><text class="vector" y="15">3</text></g><g class="node" tabindex="0" role="button" aria-label="火星 勝つための力 41.2" data-algo="face" data-pid="F" style="--i:4" transform="translate(78,244)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♂</text><text class="ingod" y="-2">41</text><text class="vector" y="15">2</text></g><g class="node" tabindex="0" role="button" aria-label="木星 物語の見どころ 54.5" data-algo="face" data-pid="G" style="--i:5" transform="translate(242,244)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♃</text><text class="ingod" y="-2">54</text><text class="vector" y="15">5</text></g><g class="node" tabindex="0" role="button" aria-label="太陽 テーマ・ジャンル・タイトル 51.6" data-algo="face" data-pid="A" style="--i:6" transform="translate(160,310)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">☉</text><text class="ingod" y="-2">51</text><text class="vector" y="15">6</text></g><g class="node" tabindex="0" role="button" aria-label="水星 決め台詞 51.3" data-algo="face" data-pid="D" style="--i:7" transform="translate(78,376)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">☿</text><text class="ingod" y="-2">51</text><text class="vector" y="15">3</text></g><g class="node" tabindex="0" role="button" aria-label="金星 主人公の魅力 15.2" data-algo="face" data-pid="E" style="--i:8" transform="translate(242,376)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">♀</text><text class="ingod" y="-2">15</text><text class="vector" y="15">2</text></g><g class="node" tabindex="0" role="button" aria-label="月 はじまりのシーン 58.5" data-algo="face" data-pid="C" style="--i:9" transform="translate(160,442)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">☽</text><text class="ingod" y="-2">58</text><text class="vector" y="15">5</text></g><g class="node" tabindex="0" role="button" aria-label="地球 タイトル 57.6" data-algo="face" data-pid="B" style="--i:10" transform="translate(160,508)"><circle class="halo" r="36" /><circle class="ring" r="27" /><circle class="disc" r="23" /><text class="glyph" y="-33">⊕</text><text class="ingod" y="-2">57</text><text class="vector" y="15">6</text></g></g></svg>
+    </section>
+  </main>
+
+  <footer>Source-grounded · Local GODSEAL corpus only</footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="detail" id="detail" aria-live="polite" aria-hidden="true">
+  <button class="close" id="closeBtn" aria-label="閉じる">×</button>
+  <div id="detailBody"></div>
+</aside>
+<div class="hint" id="hint">円をクリックして詳細を表示</div>
+
+<script id="data" type="application/json">{"maria": {"A": {"position_id": "A", "planet": "太陽", "glyph": "☉", "role": "ゲームジャンル", "role_description": "どんなゲームか。戦闘？レース？育成？パズル？", "position_title": "突出した個性で世界をつかむ", "code": "18.4", "ingod": "18", "vector": "4", "hexagram": "火風鼎", "reading": "かーふうーてい", "label": "養育", "keywords": ["養育", "火風鼎", "代々続いている家柄のアカデミックブランドが、何か大き"], "explanation": "代々続いている家柄のアカデミックブランドが、何か大きな仕事をするとき、「国家」をも動かしているような規模感になる。国民みんなに見られて、ダイナミックにやっていく動きだから「国家事業」。チャライことではない。時間規模や空間規模が大きい。", "source": "【17~24】", "source_pdf": "【17~24】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "火風鼎\n\nかーふうーてい［養育］\n\n代々続いている家柄のアカデミックブランドが、何か大き\nな仕事をするとき、\n「国家」をも動かしているような規模感\nになる。国民みんなに見られて、ダイナミックにやっていく\n動きだから「国家事業」。チャライことではない。時間規模や\n空間規模が大きい。", "needs_review": false, "source_available": true}, "B": {"position_id": "B", "planet": "地球", "glyph": "⊕", "role": "コントローラー", "role_description": "ゲームを進めるための操作方法", "position_title": "これを使い欲しい物を得る", "code": "17.4", "ingod": "17", "vector": "4", "hexagram": "水雷屯", "reading": "すいーらいーちゅん", "label": "産婆さん", "keywords": ["産婆さん", "水雷屯", "メンタルコーチ"], "explanation": "メンタルコーチ\n見えないものを導いていく。導くのは、この世界でまだ形になっていないエネルギー、すなわち心の中にあるエネルギーを導くってこと。誰のどんな氣持ちに寄り添うのかが生み出されるものを決定する。それがテーマだということ。", "source": "【17~24】", "source_pdf": "【17~24】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "水雷屯\n\nすいーらいーちゅん［産婆さん］\n\nメンタルコーチ\n見えないものを導いていく。導くのは、この世界でまだ形\nになっていないエネルギー、すなわち心の中にあるエネル\nギーを導くってこと。誰のどんな氣持ちに寄り添うのかが\n生み出されるものを決定する。\nそれがテーマだということ。", "needs_review": false, "source_available": true}, "C": {"position_id": "C", "planet": "月", "glyph": "☽", "role": "ストーリー", "role_description": "ゲームの背景にある前世の物語", "position_title": "これを解決せずに進む", "code": "19.6", "ingod": "19", "vector": "6", "hexagram": "山沢損", "reading": "さんーたくーそん", "label": "筆おろし専門", "keywords": ["筆おろし専門", "山沢損", "果報は寝て待て,牧場主,肥沃な土壌"], "explanation": "果報は寝て待て,牧場主,肥沃な土壌その人が持っている場から、何かの生産ができる。直ぐにはできないけれど、生産すれば受け取れる土壌を持っている。例えばフルーツ畑でもいいし、牧場でもいい、大事に持っている場があり、何かがあった時は、「全部刈り取れるよ」という状況であること。", "source": "【17~24】", "source_pdf": "【17~24】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "山沢損\n\nさんーたくーそん［筆おろし専門］\n\n果報は寝て待て,牧場主,肥沃な土壌\nその人が持っている場から、何かの生産ができる。直ぐには\nできないけれど、生産すれば受け取れる土壌を持っている。\n例えばフルーツ畑でもいいし、牧場でもいい、大事に持って\nいる場があり、何かがあった時は、\n「全部刈り取れるよ」とい\nう状況であること。", "needs_review": false, "source_available": true}, "D": {"position_id": "D", "planet": "水星", "glyph": "☿", "role": "情報収集", "role_description": "村人や敵から有効な情報を入手するための手段", "position_title": "これを自慢する", "code": "47.5", "ingod": "47", "vector": "5", "hexagram": "雷水解", "reading": "らい－すい－かい", "label": "お母さん", "keywords": ["お母さん", "雷水解", "ノゴーンベキ, 母親象"], "explanation": "ノゴーンベキ, 母親象\n愛ゆえに突進するという意味。子象が危険にさらされた時の母親象は、世界を破壊する。途上国に飛び込んでいくお医者さんとか、砂漠の緑地化に立ち向かっている人とか。一人で行って愛を表現し切った歴史的人物。不可能を可能に変える、愛とエネルギーと力がある人。表現しきる力。", "source": "【41~48】", "source_pdf": "【41~48】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "雷水解\n\nらい－すい－かい［お母さん］\n\nノゴーンベキ, 母親象\n愛ゆえに突進するという意味。子象が危険にさらされた時の\n母親象は、世界を破壊する。途上国に飛び込んでいくお医者\nさんとか、砂漠の緑地化に立ち向かっている人とか。一人で\n行って愛を表現し切った歴史的人物。不可能を可能に変える、\n愛とエネルギーと力がある人。表現しきる力。", "needs_review": false, "source_available": true}, "E": {"position_id": "E", "planet": "金星", "glyph": "♀", "role": "ドロップアイテム", "role_description": "怪獣をやっつけたら最後にもらえる宝物", "position_title": "これでモテ嫉妬される", "code": "46.1", "ingod": "46", "vector": "1", "hexagram": "地天泰", "reading": "ち－てん－たい", "label": "ヘルスケア", "keywords": ["ヘルスケア", "地天泰", "「イマジネーション」が、地天泰「ヘルスケア」の方へいくと"], "explanation": "「イマジネーション」が、地天泰「ヘルスケア」の方へいくと、うまれてくるのは世界平和、エターナルライフ、穢れのない「永遠に続く幸せ」。「何かがあったからそうなった」ではなく、ずっと幸せのインフィニティに入るのだろうと思います。", "source": "【41~48】", "source_pdf": "【41~48】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "地天泰\n\nち－てん－たい［ヘルスケア］\n\n「イマジネーション」が、地天泰「ヘルスケア」の方へいくと、\nうまれてくるのは世界平和、エターナルライフ、穢れのない「永\n遠に続く幸せ」。\n「何かがあったからそうなった」ではなく、ずっと\n幸せのインフィニティに入るのだろうと思います。", "needs_review": false, "source_available": true}, "F": {"position_id": "F", "planet": "火星", "glyph": "♂", "role": "必殺スキル", "role_description": "コインが貯まると打てる必殺技", "position_title": "これでオンリーワンタイトルをとる", "code": "35.1", "ingod": "35", "vector": "1", "hexagram": "火雷噬嗑", "reading": "かーらいーぜいこう", "label": "相続", "keywords": ["相続", "火雷噬嗑", "お金もうけ,やる氣スイッチ"], "explanation": "お金もうけ,やる氣スイッチ\n「次いってみよう」の言葉で号令を出すエネルギーが、お金をいただく「相続」のほうを向いているということは、まさに、「お金もうけ」に直接つながってくるエネルギーになる。号令は「やる氣スイッチ」を入れることにもつながっている。", "source": "【33~40】", "source_pdf": "【33~40】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "火雷噬嗑\n\nかーらいーぜいこう［相続］\n\nお金もうけ,やる氣スイッチ\n「次いってみよう」の言葉で号令を出すエネルギーが、お金を\nいただく「相続」のほうを向いているということは、まさに、\n「お金もうけ」に直接つながってくるエネルギーになる。号令\nは「やる氣スイッチ」を入れることにもつながっている。", "needs_review": false, "source_available": true}, "G": {"position_id": "G", "planet": "木星", "glyph": "♃", "role": "ボーナスステージ", "role_description": "努力やリスクなしに望みをゲットできる", "position_title": "これを楽に使って儲かる", "code": "33.1", "ingod": "33", "vector": "1", "hexagram": "天火同人", "reading": "てんーかーどうじん", "label": "ダビンチコード", "keywords": ["ダビンチコード", "天火同人", "ごほうび,スポンサーとの出会い,新たな道"], "explanation": "ごほうび,スポンサーとの出会い,新たな道「未知との遭遇」が、１番方向の「ダビンチコード」に向かうエネルギーは、自分にあげる「ご褒美」みたいな感じ。今まで持っていなかった新しいものを与える。「スポンサーとの出会い」のように、主に、人に関係するエネルギーになる。", "source": "【33~40】", "source_pdf": "【33~40】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "天火同人\n\nてんーかーどうじん［ダビンチコード］\n\nごほうび,スポンサーとの出会い,新たな道\n「未知との遭遇」が、１番方向の「ダビンチコード」に向かう\nエネルギーは、自分にあげる「ご褒美」みたいな感じ。今ま\nで持っていなかった新しいものを与える。\n「スポンサーとの\n出会い」のように、主に、人に関係するエネルギーになる。", "needs_review": false, "source_available": true}, "H": {"position_id": "H", "planet": "土星", "glyph": "♄", "role": "経験コイン", "role_description": "コツコツと目の前の敵を倒していると貯まっている", "position_title": "嫌だいやだと吹聴する", "code": "54.4", "ingod": "54", "vector": "4", "hexagram": "地沢臨", "reading": "ち－たく－りん", "label": "姐御", "keywords": ["姐御", "地沢臨", "元がブラックシンデレラだから、優しい女優ではない、エネ"], "explanation": "元がブラックシンデレラだから、優しい女優ではない、エネルギー大きめ。「あなたが前に出たら、スポンサーがお金くれる」という常態。看板女優である自分も儲かるし、周りも儲かっていく。受け取っている環境が出来ている。周りに対して商品としての自分。", "source": "【49~56】", "source_pdf": "【49~56】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "地沢臨\n\nち－たく－りん［姐御］\n\n元がブラックシンデレラだから、優しい女優ではない、エネ\nルギー大きめ。「あなたが前に出たら、スポンサーがお金く\nれる」という常態。看板女優である自分も儲かるし、周りも\n儲かっていく。受け取っている環境が出来ている。周りに対\nして商品としての自分。", "needs_review": false, "source_available": true}, "I": {"position_id": "I", "planet": "天王星", "glyph": "♅", "role": "回復魔法", "role_description": "パワーゲージを回復させるための方法", "position_title": "これでエネルギーをためる", "code": "58.2", "ingod": "58", "vector": "2", "hexagram": "沢雷随", "reading": "たく－すい－こん", "label": "フィクサー", "keywords": ["フィクサー", "沢雷随", "付き添って一緒に走ってくれる人。同じ世界を一緒に味わって"], "explanation": "神父は前頁の「祭祀」と違って、パーソナルに寄っているイメージ。「ランナーズハイ」が「フィクサー」方向へ、という意味で、付き添って一緒に走ってくれる人。同じ世界を一緒に味わってくれる、若しくは創ってくれる人。", "source": "【57~64】", "source_pdf": "【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "沢雷随\n\nたく－すい－こん［フィクサー］\n\n神父は前頁の「祭祀」と違って、パーソナルに寄っているイメー\nジ。「ランナーズハイ」が「フィクサー」方向へ、という意味で、\n付き添って一緒に走ってくれる人。同じ世界を一緒に味わって\nくれる、若しくは創ってくれる人。", "needs_review": false, "source_available": true}, "J": {"position_id": "J", "planet": "海王星", "glyph": "♆", "role": "チート", "role_description": "ちょっと卑怯なほど無敵になる手段", "position_title": "わたしはこれの神である", "code": "38.3", "ingod": "38", "vector": "3", "hexagram": "火天大有", "reading": "かーてんーたいゆう", "label": "太陽の化身", "keywords": ["太陽の化身", "火天大有", "才能によって場が提供される。特集で組まれるようなスタント"], "explanation": "才能によって場が提供される。特集で組まれるようなスタントマン。ガテン系の俳優という意味じゃない。表には出てこない存在だけど、凄く応援されて、才能を命懸けで提供する。非常にアカデミックな場や、特殊な環境で評価され、仲間みんなから祝福されている常態。", "source": "【33~40】", "source_pdf": "【33~40】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "火天大有\n\nかーてんーたいゆう［太陽の化身］\n\n才能によって場が提供される。特集で組まれるようなスタント\nマン。ガテン系の俳優という意味じゃない。表には出てこない\n存在だけど、凄く応援されて、才能を命懸けで提供する。非常\nにアカデミックな場や、特殊な環境で評価され、仲間みんなか\nら祝福されている常態。", "needs_review": false, "source_available": true}, "K": {"position_id": "K", "planet": "冥王星", "glyph": "♇", "role": "レベルアップ", "role_description": "ある基準が整ったとき、これを使ってレベルアップする", "position_title": "これで生産レイヤーがあがる", "code": "1.4", "ingod": "1", "vector": "4", "hexagram": "風天小畜", "reading": "ふうーてんーしょうーちく", "label": "人体実験", "keywords": ["人体実験", "風天小畜", "オタク"], "explanation": "オタク\n宇宙に１つしかない輝きを持つあなたが、何者かになる。初めてのことをやることで湧き出す何かを味わうことで、未知の領域をベクトル4を経験します。自分のエネルギーのふり幅によって「自分は自分の専門家である」ことに氣づくのが9 番。", "source": "【1~8】", "source_pdf": "【1~8】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "風天小畜\n\nふうーてんーしょうーちく［人体実験］\n\nオタク\n宇宙に１つしかない輝きを持つあなたが、何者かになる。\n初めてのことをやることで湧き出す何かを味わうことで、\n未知の領域をベクトル4を経験します。自分のエネルギーの\nふり幅によって「自分は自分の専門家である」ことに氣づく\nのが9 番。", "needs_review": false, "source_available": true}}, "face": {"A": {"position_id": "A", "planet": "太陽", "glyph": "☉", "role": "テーマ・ジャンル・タイトル", "role_description": "この物語が伝えたいテーマ", "position_title": "", "code": "51.6", "ingod": "51", "vector": "6", "hexagram": "火雷噬嗑", "reading": "か－らい－ぜいこう", "label": "相続", "keywords": ["相続", "火雷噬嗑", "全員がひとつの想いに対して負けを認める瞬間の象徴が「玉"], "explanation": "全員がひとつの想いに対して負けを認める瞬間の象徴が「玉音放送」。日本の霊性が打ち砕かれ、現代も薄れることなく、強烈な印象を残す。心に色濃く残る「記憶の最大値」、トラウマ級の愛や苦しみを植え付ける。上手く使うと覇王になる。「雷」が極まる象徴的な存在。", "source": "【49~56】", "source_pdf": "【49~56】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "火雷噬嗑\n\nか－らい－ぜいこう［相続］\n\n全員がひとつの想いに対して負けを認める瞬間の象徴が「玉\n音放送」。日本の霊性が打ち砕かれ、現代も薄れることなく、\n強烈な印象を残す。心に色濃く残る「記憶の最大値」、トラ\nウマ級の愛や苦しみを植え付ける。上手く使うと覇王になる。\n「雷」が極まる象徴的な存在。", "needs_review": false, "source_available": true}, "B": {"position_id": "B", "planet": "地球", "glyph": "⊕", "role": "タイトル", "role_description": "地球をあらわすタイトル", "position_title": "", "code": "57.6", "ingod": "57", "vector": "6", "hexagram": "水風井", "reading": "すい－ふう－い", "label": "黒魔術", "keywords": ["黒魔術", "水風井", "伝説の名器のバイオリン"], "explanation": "伝説の名器のバイオリン\n「刹那」が「黒魔術」の方向というのは、時空を超えるということ。音速や、赤外線通信のように、圧縮してデータを飛ばすという意味。ベートーベンと同じ時代の音である、ストラディバリウス（バイオリン）の音色を聞くと、「全細胞が痺れちゃう」みたいな感じ。", "source": "【57~64】", "source_pdf": "【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "水風井\n\nすい－ふう－い［黒魔術］\n\n伝説の名器のバイオリン\n「刹那」が「黒魔術」の方向というのは、時空を超えるという\nこと。音速や、赤外線通信のように、圧縮してデータを飛ば\nすという意味。ベートーベンと同じ時代の音である、ストラ\nディバリウス（バイオリン）の音色を聞くと、「全細胞が痺れ\nちゃう」みたいな感じ。", "needs_review": false, "source_available": true}, "C": {"position_id": "C", "planet": "月", "glyph": "☽", "role": "はじまりのシーン", "role_description": "はじまりのシーン", "position_title": "", "code": "58.5", "ingod": "58", "vector": "5", "hexagram": "雷沢帰妹", "reading": "らい－たく－きまい", "label": "ブラックシンデレラ", "keywords": ["ブラックシンデレラ", "雷沢帰妹", "プリティウーマン"], "explanation": "プリティウーマン\n人名で例えるとするとマドンナとかエビータ。どん底から誰かに引き立てられ、成り上がっていく過程全てが、ビビットな感情に満ち溢れた楽しい常態。まさに映画の「プリティーウーマン」", "source": "【57~64】", "source_pdf": "【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "雷沢帰妹\n\nらい－たく－きまい［ブラックシンデレラ］\n\nプリティウーマン\n人名で例えるとするとマドンナとかエビータ。どん底から誰\nかに引き立てられ、成り上がっていく過程全てが、ビビットな\n感情に満ち溢れた楽しい常態。まさに映画の「プリティー\nウーマン」", "needs_review": false, "source_available": true}, "D": {"position_id": "D", "planet": "水星", "glyph": "☿", "role": "決め台詞", "role_description": "この物語が伝えたいテーマと決め台詞", "position_title": "", "code": "51.3", "ingod": "51", "vector": "3", "hexagram": "雷火豊", "reading": "らい－か－ほう", "label": "歓喜", "keywords": ["歓喜", "雷火豊", "愛の電氣ウナギ"], "explanation": "愛の電氣ウナギ\n何かの作品を作る時や、形に起こしていく時のアイコン。ビリビリって痺れさせる。受け取る側が、悪いエネルギーと感じたのなら「敵」、愛であれば「夢や希望」となる。このエモーショナルなエネルギー信号が、「桃パフェ」みたいな強いヒット商品を作る要となる。", "source": "【49~56】", "source_pdf": "【49~56】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "雷火豊\n\nらい－か－ほう［歓喜］\n\n愛の電氣ウナギ\n何かの作品を作る時や、形に起こしていく時のアイコン。ビ\nリビリって痺れさせる。受け取る側が、悪いエネルギーと感\nじたのなら「敵」、愛であれば「夢や希望」となる。このエモー\nショナルなエネルギー信号が、\n「桃パフェ」みたいな強いヒット\n商品を作る要となる。", "needs_review": false, "source_available": true}, "E": {"position_id": "E", "planet": "金星", "glyph": "♀", "role": "主人公の魅力", "role_description": "物語の主人公の魅力", "position_title": "", "code": "15.2", "ingod": "15", "vector": "2", "hexagram": "地風升", "reading": "ちーふうーしょう", "label": "イマジネーション", "keywords": ["イマジネーション", "地風升", "スター誕生,夢のような人生の始まり"], "explanation": "スター誕生,夢のような人生の始まり「体感覚」のエネルギーが「イマジネーション」の方に向くということは、夢がかなう瞬間のコト。「スター誕生」って、夢のような、素晴らしい人生の始まりになる瞬間。「魔法が使えちゃった」という感じ。", "source": "【9~16】", "source_pdf": "【9~16】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "地風升\n\nちーふうーしょう［イマジネーション］\n\nスター誕生,夢のような人生の始まり\n「体感覚」のエネルギーが「イマジネーション」の方に向くと\nいうことは、夢がかなう瞬間のコト。「スター誕生」って、\n夢のような、素晴らしい人生の始まりになる瞬間。\n「魔法が\n使えちゃった」という感じ。", "needs_review": false, "source_available": true}, "F": {"position_id": "F", "planet": "火星", "glyph": "♂", "role": "勝つための力", "role_description": "主人公が持つ、勝つための力", "position_title": "", "code": "41.2", "ingod": "41", "vector": "2", "hexagram": "山雷頤", "reading": "さん－らい－い", "label": "小鳥守", "keywords": ["小鳥守", "山雷頤", "命がけ,リアクション芸"], "explanation": "命がけ,リアクション芸\n「命がけっぽく見える」だけでいい。その姿は、命がけ以上に命がけっぽく見える。期待されてバンジージャンプを飛ぶと、英雄になれる。ひとりでこっそりバンジージャンプしても意味はない。カメラに撮られている常態で「やりたくないよ～」と言いながら落ちていくと、大きいギャラになる。", "source": "【41~48】", "source_pdf": "【41~48】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "山雷頤\n\nさん－らい－い［小鳥守］\n\n命がけ,リアクション芸\n「命がけっぽく見える」だけでいい。その姿は、命がけ以上に\n命がけっぽく見える。期待されてバンジージャンプを飛ぶと、\n英雄になれる。ひとりでこっそりバンジージャンプしても意味は\nない。カメラに撮られている常態で「やりたくないよ～」と言い\nながら落ちていくと、大きいギャラになる。", "needs_review": false, "source_available": true}, "G": {"position_id": "G", "planet": "木星", "glyph": "♃", "role": "物語の見どころ", "role_description": "ドキドキハラハラする物語の見どころ", "position_title": "", "code": "54.5", "ingod": "54", "vector": "5", "hexagram": "兌為沢", "reading": "だ－い－たく", "label": "ランナーズハイ", "keywords": ["ランナーズハイ", "兌為沢", "紀伊国屋文左衛門"], "explanation": "紀伊国屋文左衛門\n江戸時代の豪商。お金持ちの象徴。金遣いが非常に派手で、お金をばらまき、明るくて遊び上手。要らないものは切る。自分のルールで世界を創り上げ、「使っても使っても金は無くならん。人生を楽しめ～」という常態にいる。楽しいだけの状況。", "source": "【49~56】", "source_pdf": "【49~56】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "兌為沢\n\nだ－い－たく［ランナーズハイ］\n\n紀伊国屋文左衛門\n江戸時代の豪商。お金持ちの象徴。金遣いが非常に派手で、\nお金をばらまき、明るくて遊び上手。要らないものは切る。\n自分のルールで世界を創り上げ、\n「使っても使っても金は無く\nならん。人生を楽しめ～」という常態にいる。楽しいだけの\n状況。", "needs_review": false, "source_available": true}, "H": {"position_id": "H", "planet": "土星", "glyph": "♄", "role": "観客を惹きつける装飾", "role_description": "観客を惹きつける物語の装飾", "position_title": "", "code": "62.3", "ingod": "62", "vector": "3", "hexagram": "雷地豫", "reading": "らい－ち－よ", "label": "スーパースター", "keywords": ["スーパースター", "雷地豫", "遅咲きのスーパースター, 救世主"], "explanation": "遅咲きのスーパースター, 救世主ＫＦＣの創始者カーネルサンダース氏は、60歳を超えてから、あの味に辿り着いた。失敗を繰り返し作り続けた結果、クリスマスにはＫＦＣと言われるくらい皆から選ばれた「遅咲きのスーパースター」。砂漠に水を引いた人のような「救世主」。みんなが見守り、想いに道ができる。", "source": "【57~64】", "source_pdf": "【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "雷地豫\n\nらい－ち－よ［スーパースター］\n\n遅咲きのスーパースター, 救世主\nＫＦＣの創始者カーネルサンダース氏は、60歳を超えてから、\nあの味に辿り着いた。失敗を繰り返し作り続けた結果、クリス\nマスにはＫＦＣと言われるくらい皆から選ばれた「遅咲きのスー\nパースター」。砂漠に水を引いた人のような「救世主」。みんな\nが見守り、想いに道ができる。", "needs_review": false, "source_available": true}, "I": {"position_id": "I", "planet": "天王星", "glyph": "♅", "role": "魂が選んだ動機", "role_description": "この物語を魂が選んだ動機", "position_title": "", "code": "57.4", "ingod": "57", "vector": "4", "hexagram": "天風姤", "reading": "てん－ぷう－こう", "label": "魚群探知機", "keywords": ["魚群探知機", "天風姤", "わたしの道,マイフェアレディ"], "explanation": "わたしの道,マイフェアレディ\n一番小さい振動。世の中で起こる事は、すべて私の内側の形のひとつ。あなたの内側に答えがある。それが「わたしの道」。私は、自分の内側の声を聴いて私の道を進んでいる、という常態。あなたの世界は、あなたの中にある全ての機構であるということを認知すること。", "source": "【57~64】", "source_pdf": "【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "天風姤\n\nてん－ぷう－こう［魚群探知機］\n\nわたしの道,マイフェアレディ\n一番小さい振動。世の中で起こる事は、すべて私の内側の\n形のひとつ。あなたの内側に答えがある。それが「わたしの\n道」。私は、自分の内側の声を聴いて私の道を進んでいる、\nという常態。あなたの世界は、あなたの中にある全ての機構\nであるということを認知すること。", "needs_review": false, "source_available": true}, "J": {"position_id": "J", "planet": "海王星", "glyph": "♆", "role": "主演映画", "role_description": "これまで地球に来て演じた主演映画", "position_title": "", "code": "37.5", "ingod": "37", "vector": "5", "hexagram": "山火賁", "reading": "さんーかーひ", "label": "社交界の華", "keywords": ["社交界の華", "山火賁", "ば、説明がなくても一目で意図が通じ、その場にいるみんなが"], "explanation": "正式な場に出るための、オフィシャルのスタイル。この形であれば、説明がなくても一目で意図が通じ、その場にいるみんなが「一緒だね」となる。「ちゃんとした、みんなの決まりのお洋服を着ましょう」というお約束が「正装」。", "source": "【33~40】", "source_pdf": "【33~40】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "山火賁\n\nさんーかーひ［社交界の華］\n\n正式な場に出るための、オフィシャルのスタイル。この形であれ\nば、説明がなくても一目で意図が通じ、その場にいるみんなが\n「一緒だね」となる。「ちゃんとした、みんなの決まりのお洋服\nを着ましょう」というお約束が「正装」。", "needs_review": false, "source_available": true}, "K": {"position_id": "K", "planet": "冥王星", "glyph": "♇", "role": "ナレーション・神通力", "role_description": "物語を俯瞰した位置からの説明", "position_title": "", "code": "2.3", "ingod": "2", "vector": "3", "hexagram": "地山謙", "reading": "ちーざんーけん", "label": "体感覚", "keywords": ["体感覚", "地山謙", "癒し,治癒,お守り"], "explanation": "癒し,治癒,お守り\nあなたが動くのは、細胞が振動する方向。「魂に身体と心が乗る」という経験。今は、自分自身を誰かに侵されて、その全てが我慢できないという世界。これからあなたの前に、「なんでそんなこと？」と思うことがいっぱい出てくる。あなたは魂の上に立って、この番号をインストールしないとダメなの。", "source": "【1~8】", "source_pdf": "【1~8】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf", "raw_body": "地山謙\n\nちーざんーけん［体感覚］\n\n癒し,治癒,お守り\nあなたが動くのは、細胞が振動する方向。「魂に身体と心が乗\nる」という経験。今は、自分自身を誰かに侵されて、その全て\nが我慢できないという世界。これからあなたの前に、「なんで\nそんなこと？」と思うことがいっぱい出てくる。あなたは魂の\n上に立って、この番号をインストールしないとダメなの。", "needs_review": false, "source_available": true}}}</script>
+<script>
+(function () {
+  const DATA = JSON.parse(document.getElementById("data").textContent);
+  const detail = document.getElementById("detail");
+  const detailBody = document.getElementById("detailBody");
+  const scrim = document.getElementById("scrim");
+  const hint = document.getElementById("hint");
+  const closeBtn = document.getElementById("closeBtn");
+  let activeNode = null;
+
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function render(algo, pid) {
+    const d = DATA[algo] && DATA[algo][pid];
+    if (!d) return;
+    detail.setAttribute("data-algo", algo);
+    const kw = (d.keywords || []).map(function (k) { return "<span>" + esc(k) + "</span>"; }).join("");
+    const algoLabel = algo === "maria" ? "Algorithm · Maria" : "Algorithm · Face";
+    let html = "";
+    html += '<div class="d-accent">' + esc(algoLabel) + " · " + esc(pid) + "</div>";
+    html += '<div class="d-glyph">' + esc(d.glyph) + "</div>";
+    html += '<div class="d-planet">' + esc(d.planet) + "</div>";
+    html += '<div class="d-role">' + esc(d.role) + "</div>";
+    if (d.role_description) html += '<div class="d-roledesc">' + esc(d.role_description) + "</div>";
+    if (d.position_title) html += '<div class="d-title">「' + esc(d.position_title) + "」</div>";
+    html += '<div class="d-rule"></div>';
+    html += '<div class="d-code"><span class="num">' + esc(d.code) + '</span><span class="hex">' + esc(d.hexagram) + "</span></div>";
+    if (d.reading) html += '<div class="d-reading">' + esc(d.reading) + "</div>";
+    if (d.label) html += '<span class="d-label">' + esc(d.label) + "</span>";
+    if (kw) html += '<div class="d-keywords">' + kw + "</div>";
+    html += '<div class="d-section-k">根拠にもとづく解説</div>';
+    if (d.source_available) {
+      html += '<div class="d-body">' + esc(d.explanation) + "</div>";
+      if (d.source) {
+        var pdfHref = d.source_pdf ? ("../" + encodeURIComponent(d.source_pdf)) : "";
+        html += '<div class="d-source"><span class="lab">出典 · ' + esc(d.source) + "</span>";
+        html += '<button class="src-toggle" type="button" data-src-toggle>原本を見る ▾</button></div>';
+        html += '<div class="src-original" data-src-original>';
+        if (pdfHref) html += '<a class="pdf-link" href="' + pdfHref + '" target="_blank" rel="noopener">⤓ PDF原本を開く</a>';
+        html += '<div class="raw">' + esc(d.raw_body) + "</div>";
+        html += '<div class="raw-note">※ ローカルPDFからの抽出テキスト原文（図版由来の文字重なりを含む）</div></div>';
+      }
+    } else {
+      html += '<div class="d-body">ローカルPDFに該当エントリがないため、意味は説明しません。</div>';
+    }
+    if (d.needs_review) html += '<div class="d-warn">⚠ 読み取り信頼度が低い枠です。確定前に人の確認が必要。</div>';
+    detailBody.innerHTML = html;
+    var toggle = detailBody.querySelector("[data-src-toggle]");
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        var orig = detailBody.querySelector("[data-src-original]");
+        if (!orig) return;
+        var open = orig.classList.toggle("open");
+        toggle.textContent = open ? "原本を閉じる ▴" : "原本を見る ▾";
+      });
+    }
+    detail.classList.add("open");
+    detail.setAttribute("aria-hidden", "false");
+    scrim.classList.add("show");
+    hint.classList.add("hide");
+  }
+
+  function close() {
+    detail.classList.remove("open");
+    detail.setAttribute("aria-hidden", "true");
+    scrim.classList.remove("show");
+    if (activeNode) { activeNode.classList.remove("is-active"); activeNode = null; }
+  }
+
+  document.querySelectorAll(".node").forEach(function (node) {
+    function activate() {
+      if (activeNode) activeNode.classList.remove("is-active");
+      node.classList.add("is-active");
+      activeNode = node;
+      render(node.getAttribute("data-algo"), node.getAttribute("data-pid"));
+    }
+    node.addEventListener("click", activate);
+    node.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
+    });
+  });
+
+  closeBtn.addEventListener("click", close);
+  scrim.addEventListener("click", close);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+})();
+</script>
+</body>
+</html>

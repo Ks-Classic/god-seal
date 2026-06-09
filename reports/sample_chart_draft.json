@@ -1,0 +1,229 @@
+{
+  "source_image": "63e3adbd-6e19-4c05-ac9f-1c9714fece98.jpg",
+  "reading_method": "draft_from_confirmed_reading",
+  "review_threshold": 0.95,
+  "maria": [
+    {
+      "position_id": "A",
+      "selected_code": "17.4",
+      "candidates": [
+        "17.4"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "B",
+      "selected_code": "1.4",
+      "candidates": [
+        "1.4"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "C",
+      "selected_code": "19.6",
+      "candidates": [
+        "19.6"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "D",
+      "selected_code": "47.5",
+      "candidates": [
+        "47.5"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "E",
+      "selected_code": "46.1",
+      "candidates": [
+        "46.1"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "F",
+      "selected_code": "35.1",
+      "candidates": [
+        "35.1"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "G",
+      "selected_code": "33.1",
+      "candidates": [
+        "33.1"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "H",
+      "selected_code": "54.4",
+      "candidates": [
+        "54.4"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "I",
+      "selected_code": "58.2",
+      "candidates": [
+        "58.2"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "J",
+      "selected_code": "38.3",
+      "candidates": [
+        "38.3"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "K",
+      "selected_code": "18.4",
+      "candidates": [
+        "18.4"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    }
+  ],
+  "face": [
+    {
+      "position_id": "A",
+      "selected_code": "37.5",
+      "candidates": [
+        "37.5"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "B",
+      "selected_code": "2.3",
+      "candidates": [
+        "2.3"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "C",
+      "selected_code": "51.6",
+      "candidates": [
+        "51.6"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "D",
+      "selected_code": "57.4",
+      "candidates": [
+        "57.4"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "E",
+      "selected_code": "62.3",
+      "candidates": [
+        "62.3"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "F",
+      "selected_code": "54.5",
+      "candidates": [
+        "54.5"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "G",
+      "selected_code": "41.2",
+      "candidates": [
+        "41.2"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "H",
+      "selected_code": "15.2",
+      "candidates": [
+        "15.2"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "I",
+      "selected_code": "51.3",
+      "candidates": [
+        "51.3"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "J",
+      "selected_code": "57.6",
+      "candidates": [
+        "57.6"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    },
+    {
+      "position_id": "K",
+      "selected_code": "58.5",
+      "candidates": [
+        "58.5"
+      ],
+      "read_confidence": 1.0,
+      "needs_review": false,
+      "notes": ""
+    }
+  ]
+}

@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GODSEAL Interpretation Report</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #151719;
+      --muted: #5b626b;
+      --line: #d9dee5;
+      --panel: #ffffff;
+      --surface: #f5f7fa;
+      --accent: #0f766e;
+      --warn: #9f1239;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 20px 0 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: 0;
+      line-height: 1.15;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .meta li {
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+    }
+    section { padding-top: 32px; }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .section-heading h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .frame-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 12px;
+    }
+    .frame {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .frame.missing { border-left-color: var(--warn); }
+    .frame header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    h2 span {
+      display: block;
+      margin-top: 2px;
+      font-size: 15px;
+      font-weight: 650;
+    }
+    .status {
+      flex: 0 0 auto;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #e6f4f1;
+      color: #115e59;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badges {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      gap: 5px;
+    }
+    .review-status {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+    .missing .status {
+      background: #ffe4e6;
+      color: var(--warn);
+    }
+    .role,
+    .position-title,
+    .missing-message {
+      margin: 8px 0;
+    }
+    .role { font-weight: 650; }
+    .position-title { color: var(--muted); }
+    .terms {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    h3 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    li {
+      min-width: 0;
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: var(--surface);
+      font-size: 13px;
+    }
+    .explanation {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .explanation p,
+    details p {
+      margin: 0;
+      font-size: 14px;
+    }
+    details {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .source-pdf {
+      margin-top: 8px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+    @media (max-width: 520px) {
+      main { width: min(100% - 20px, 1180px); padding-top: 18px; }
+      .frame-grid { grid-template-columns: 1fr; }
+      .frame header { flex-direction: column; }
+      .badges { align-items: start; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topbar">
+      <h1>GODSEAL Interpretation Report</h1>
+      <ul class="meta">
+        <li>Source image: 63e3adbd-6e19-4c05-ac9f-1c9714fece98.jpg</li>
+        <li>Reading: manual_or_vision_assisted_finalized</li>
+        <li>Boundary: local GODSEAL source data only</li>
+        <li>Missing source frames: 0</li>
+        <li>Needs review: 0</li>
+      </ul>
+    </div>
+    
+    <section>
+      <div class="section-heading">
+        <h1>Maria</h1>
+        <p>11 frames</p>
+      </div>
+      <div class="frame-grid">
+        
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria A / 太陽 / ゲームジャンル</p>
+          <h2>17.4 <span>産婆さん</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">どんなゲームか。戦闘？レース？育成？パズル？</p>
+      <p class="position-title">突出した個性で世界をつかむ</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>産婆さん</li><li>水雷屯</li><li>メンタルコーチ</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「ゲームジャンル」です。枠の説明は「どんなゲームか。戦闘？レース？育成？パズル？」。ここに 17.4 のソース項目 「産婆さん」 / 「水雷屯」 / 「メンタルコーチ」 を割り当てます。<br>位置タイトルは「突出した個性で世界をつかむ」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>メンタルコーチ<br>見えないものを導いていく。導くのは、この世界でまだ形<br>になっていないエネルギー、すなわち心の中にあるエネル<br>ギーを導くってこと。誰のどんな氣持ちに寄り添うのか<br>誰のどんな氣持ちに寄り添うのかが<br>生み出されるものを決定する。<br>。<br>それがテーマだという<br>こと。<br>それがテーマだということ。</p>
+        <p class="source-pdf">【17~24】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria B / 地球 / コントローラー</p>
+          <h2>1.4 <span>人体実験</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">ゲームを進めるための操作方法</p>
+      <p class="position-title">これを使い欲しい物を得る</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>人体実験</li><li>風天小畜</li><li>オタク</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「コントローラー」です。枠の説明は「ゲームを進めるための操作方法」。ここに 1.4 のソース項目 「人体実験」 / 「風天小畜」 / 「オタク」 を割り当てます。<br>位置タイトルは「これを使い欲しい物を得る」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>オタク<br>宇宙に１つしかない輝きを持つあなたが、何者かになる。<br>初めてのことをやることで湧き出す何かを味わうことで、<br>未知の領域をベクトル4を経験します。自分のエネルギーの<br>を経験します。自分のエネルギーの<br>ふり幅によって「自分は自分の専門家である」ことに氣づく<br>のが 9 番。</p>
+        <p class="source-pdf">【1~8】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria C / 月 / ストーリー</p>
+          <h2>19.6 <span>筆おろし専門</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">ゲームの背景にある前世の物語</p>
+      <p class="position-title">これを解決せずに進む</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>筆おろし専門</li><li>山沢損</li><li>果報は寝て待て,牧場主,肥沃な土壌</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「ストーリー」です。枠の説明は「ゲームの背景にある前世の物語」。ここに 19.6 のソース項目 「筆おろし専門」 / 「山沢損」 / 「果報は寝て待て,牧場主,肥沃な土壌」 を割り当てます。<br>位置タイトルは「これを解決せずに進む」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>果報は寝て待て,牧場主,肥沃な土壌<br>その人が持っている場から、何かの生産ができる。直ぐには<br>できないけれど、生産すれば受け取れる土壌を持っている。<br>例えばフルーツ畑でもいいし、牧場でもいい、大事に持って<br>いる場があり、何かがあった時は、<br>「全部刈り取れるよ」とい</p>
+        <p class="source-pdf">【17~24】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria D / 水星 / 情報収集</p>
+          <h2>47.5 <span>お母さん</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">村人や敵から有効な情報を入手するための手段</p>
+      <p class="position-title">これを自慢する</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>お母さん</li><li>雷水解</li><li>ノゴーンベキ, 母親象</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「情報収集」です。枠の説明は「村人や敵から有効な情報を入手するための手段」。ここに 47.5 のソース項目 「お母さん」 / 「雷水解」 / 「ノゴーンベキ, 母親象」 を割り当てます。<br>位置タイトルは「これを自慢する」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>ノゴーンベキ, 母親象<br>愛ゆえに突進するという意味。子象が危険にさらされた時の<br>母親象は、世界を破壊する。途上国に飛び込んでいくお医者<br>さんとか、砂漠の緑地化に立ち向かっている人とか。一人で<br>行って愛を表現し切った歴史的人物。不可能を可能に変える、<br>愛とエネルギーと力がある人。表現しきる力。</p>
+        <p class="source-pdf">【41~48】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria E / 金星 / ドロップアイテム</p>
+          <h2>46.1 <span>ヘルスケア</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">怪獣をやっつけたら最後にもらえる宝物</p>
+      <p class="position-title">これでモテ嫉妬される</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>ヘルスケア</li><li>地天泰</li><li>永遠に続く幸せ</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「ドロップアイテム」です。枠の説明は「怪獣をやっつけたら最後にもらえる宝物」。ここに 46.1 のソース項目 「ヘルスケア」 / 「地天泰」 / 「永遠に続く幸せ」 を割り当てます。<br>位置タイトルは「これでモテ嫉妬される」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>永遠に続く幸せ<br>「イマジネーション」が、地天泰「ヘルスケア」の方へいくと、<br>うまれてくるのは世界平和、エターナルライフ、穢れのない「永<br>遠に続く幸せ」<br>。<br>「何かがあったからそうなった」ではなく、</p>
+        <p class="source-pdf">【41~48】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria F / 火星 / 必殺スキル</p>
+          <h2>35.1 <span>相続</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">コインが貯まると打てる必殺技</p>
+      <p class="position-title">これでオンリーワンタイトルをとる</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>相続</li><li>火雷噬嗑</li><li>お金もうけ, やる氣スイッチ</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「必殺スキル」です。枠の説明は「コインが貯まると打てる必殺技」。ここに 35.1 のソース項目 「相続」 / 「火雷噬嗑」 / 「お金もうけ, やる氣スイッチ」 を割り当てます。<br>位置タイトルは「これでオンリーワンタイトルをとる」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>お金もうけ, やる氣スイッチ<br>「次いってみよう」の言葉で号令を出すエネルギーが、お金を<br>いただく「相続」のほうを向いているということは、まさに、<br>「お金もうけ」に直接つながってくるエネルギーになる。号令<br>は「やる氣スイッチ」を入れることにもつながっている。</p>
+        <p class="source-pdf">【33~40】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria G / 木星 / ボーナスステージ</p>
+          <h2>33.1 <span>ダビンチコード</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">努力やリスクなしに望みをゲットできる</p>
+      <p class="position-title">これを楽に使って儲かる</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>ダビンチコード</li><li>天火同人</li><li>ごほうび,スポンサーとの出会い,新たな道</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「ボーナスステージ」です。枠の説明は「努力やリスクなしに望みをゲットできる」。ここに 33.1 のソース項目 「ダビンチコード」 / 「天火同人」 / 「ごほうび,スポンサーとの出会い,新たな道」 を割り当てます。<br>位置タイトルは「これを楽に使って儲かる」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>ごほうび,スポンサーとの出会い,新たな道<br>「未知との遭遇」が、１番方向の「ダビンチコード」に向かう<br>エネルギーは、自分にあげる「ご褒美」みたいな感じ。今ま<br>で持っていなかった新しいものを与える。</p>
+        <p class="source-pdf">【33~40】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria H / 土星 / 経験コイン</p>
+          <h2>54.4 <span>姐御</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">コツコツと目の前の敵を倒していると貯まっている</p>
+      <p class="position-title">嫌だいやだと吹聴する</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>姐御</li><li>地沢臨</li><li>看板女優</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「経験コイン」です。枠の説明は「コツコツと目の前の敵を倒していると貯まっている」。ここに 54.4 のソース項目 「姐御」 / 「地沢臨」 / 「看板女優」 を割り当てます。<br>位置タイトルは「嫌だいやだと吹聴する」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>看板女優<br>元がブラックシンデレラだから、優しい女優ではない、エネ<br>ルギー大きめ。<br>「あなたが前に出たら、スポンサーがお金く<br>れる」という常態。看板女優である自分も儲かるし、周りも<br>儲かっていく。受け取っている環境が出来ている。周りに対<br>して商品としての自分。</p>
+        <p class="source-pdf">【49~56】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria I / 天王星 / 回復魔法</p>
+          <h2>58.2 <span>フィクサー</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">パワーゲージを回復させるための方法</p>
+      <p class="position-title">これでエネルギーをためる</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>フィクサー</li><li>沢雷随</li><li>神父</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「回復魔法」です。枠の説明は「パワーゲージを回復させるための方法」。ここに 58.2 のソース項目 「フィクサー」 / 「沢雷随」 / 「神父」 を割り当てます。<br>位置タイトルは「これでエネルギーをためる」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>神父<br>神父は前頁の「祭祀」と違って、パーソナルに寄っているイメー<br>ジ。<br>「ランナーズハイ」が「フィクサー」方向へ、という意味で、<br>付き添って一緒に走ってくれる人 。同じ世界を一緒に味わって<br>くれる、若しくは創ってくれる人。</p>
+        <p class="source-pdf">【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria J / 海王星 / チート</p>
+          <h2>38.3 <span>太陽の化身</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">ちょっと卑怯なほど無敵になる手段</p>
+      <p class="position-title">わたしはこれの神である</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>太陽の化身</li><li>火天大有</li><li>スタントマン</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「チート」です。枠の説明は「ちょっと卑怯なほど無敵になる手段」。ここに 38.3 のソース項目 「太陽の化身」 / 「火天大有」 / 「スタントマン」 を割り当てます。<br>位置タイトルは「わたしはこれの神である」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>スタントマン<br>才能によって場が提供される。特集で組まれるようなスタント<br>マン。ガテン系の俳優という意味じゃない。表には出てこない<br>存在だけど、凄く応援されて、才能を命懸けで提供する。非常<br>にアカデミックな場や、特殊な環境で評価され、仲間みんなか<br>ら祝福されている常態。</p>
+        <p class="source-pdf">【33~40】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Maria K / 冥王星 / レベルアップ</p>
+          <h2>18.4 <span>養育</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">ある基準が整ったとき、これを使ってレベルアップする</p>
+      <p class="position-title">これで生産レイヤーがあがる</p>
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>養育</li><li>火風鼎</li><li>国家事業</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「レベルアップ」です。枠の説明は「ある基準が整ったとき、これを使ってレベルアップする」。ここに 18.4 のソース項目 「養育」 / 「火風鼎」 / 「国家事業」 を割り当てます。<br>位置タイトルは「これで生産レイヤーがあがる」です。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>国家事業<br>代々続いている家柄のアカデミックブランドが、何か大き<br>な仕事をするとき、<br>「国家」をも動かしているような規模感<br>も動かしているような規模感<br>になる。国民みんなに見られて、ダイナミックにやっていく<br>動きだから「国家事業」。チャライことではない。時間規模や<br>空間規模が大きい。</p>
+        <p class="source-pdf">【17~24】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+      </div>
+    </section>
+    
+    
+    <section>
+      <div class="section-heading">
+        <h1>Face</h1>
+        <p>11 frames</p>
+      </div>
+      <div class="frame-grid">
+        
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face A / 太陽 / テーマ・ジャンル・タイトル</p>
+          <h2>37.5 <span>社交界の華</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">この物語が伝えたいテーマ</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>社交界の華</li><li>山火賁</li><li>正装</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「テーマ・ジャンル・タイトル」です。枠の説明は「この物語が伝えたいテーマ」。ここに 37.5 のソース項目 「社交界の華」 / 「山火賁」 / 「正装」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>正装<br>正式な場に出るための、オフィシャルのスタイル。この形であれ<br>ば、説明がなくても一目で意図が通じ、その場にいるみんなが<br>「一緒だね」となる。<br>「ちゃんとした、みんなの決まりのお洋服<br>を着ましょう」というお約束が「正装」。</p>
+        <p class="source-pdf">【33~40】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face B / 地球 / タイトル</p>
+          <h2>2.3 <span>体感覚</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">地球をあらわすタイトル</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>体感覚</li><li>地山謙</li><li>癒し, 治癒 ,お守り</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「タイトル」です。枠の説明は「地球をあらわすタイトル」。ここに 2.3 のソース項目 「体感覚」 / 「地山謙」 / 「癒し, 治癒 ,お守り」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>癒し, 治癒 ,お守り<br>あなたが動くのは、細胞が振動する方向。<br>「魂に身体と心が乗<br>る」という経験。今は、自分自身を誰かに侵されて、その全て<br>る」という経<br>が我慢できないという世界。これからあなたの前 「なんで<br>が我慢できないという世界。これからあなたの前に、<br>そんなこと？」と思うことがいっぱい出てくる。あなたは魂の<br>上に立って、この番号をインストールしないとダメなの。</p>
+        <p class="source-pdf">【1~8】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face C / 月 / はじまりのシーン</p>
+          <h2>51.6 <span>相続</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">はじまりのシーン</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>相続</li><li>火雷噬嗑</li><li>玉音放送</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「はじまりのシーン」です。枠の説明は「はじまりのシーン」。ここに 51.6 のソース項目 「相続」 / 「火雷噬嗑」 / 「玉音放送」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>玉音放送<br>全員がひとつの想いに対して負けを認める瞬間の象徴が「玉<br>音放送」。日本の霊性が打ち砕かれ、現代も薄れることなく、<br>強烈な印象を残す。心に色濃く残る「記憶の最大値」</p>
+        <p class="source-pdf">【49~56】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face D / 水星 / 決め台詞</p>
+          <h2>57.4 <span>魚群探知機</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">この物語が伝えたいテーマと決め台詞</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>魚群探知機</li><li>天風姤</li><li>わたしの道 ,マイフェアレディ</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「決め台詞」です。枠の説明は「この物語が伝えたいテーマと決め台詞」。ここに 57.4 のソース項目 「魚群探知機」 / 「天風姤」 / 「わたしの道 ,マイフェアレディ」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>わたしの道 ,マイフェアレディ<br>一番小さい振動。世の中で起こる事は、すべて私の内側の<br>形のひとつ。あなたの内側に答えがある。それが「わたしの<br>道」。私は、自分の内側の声を聴いて私の道を進んでいる、<br>という常態。あなたの世界は、あなたの中にある全ての機構<br>であるということを認知すること。</p>
+        <p class="source-pdf">【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face E / 金星 / 主人公の魅力</p>
+          <h2>62.3 <span>スーパースター</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">物語の主人公の魅力</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>スーパースター</li><li>雷地豫</li><li>遅咲きのスーパースター , 救世主</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「主人公の魅力」です。枠の説明は「物語の主人公の魅力」。ここに 62.3 のソース項目 「スーパースター」 / 「雷地豫」 / 「遅咲きのスーパースター , 救世主」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>遅咲きのスーパースター , 救世主<br>ＫＦＣの創始者カーネルサンダース氏は、60 歳を超えてから、<br>あの味に辿り着いた。失敗を繰り返し作り続けた結果、<br>クリス<br>マスにはＫＦＣと言われるくらい皆から選ばれた「遅咲きのスー<br>パースター」。砂漠に水を引いた人のような「救世主」。みんな<br>が見守り、想いに道ができる。</p>
+        <p class="source-pdf">【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face F / 火星 / 勝つための力</p>
+          <h2>54.5 <span>ランナーズハイ</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">主人公が持つ、勝つための力</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>ランナーズハイ</li><li>兌為沢</li><li>紀伊国屋文左衛門</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「勝つための力」です。枠の説明は「主人公が持つ、勝つための力」。ここに 54.5 のソース項目 「ランナーズハイ」 / 「兌為沢」 / 「紀伊国屋文左衛門」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>紀伊国屋文左衛門<br>江戸時代の豪商。お金持ちの象徴。金遣いが非常に派手で、<br>お金をばらまき、明るくて遊び上手。要らないものは切る。<br>自分のルールで世界を創り上げ、<br>「使っても使っても金は無く<br>ならん。人生を楽しめ〜」という常態にいる。楽しいだけの<br>状況。</p>
+        <p class="source-pdf">【49~56】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face G / 木星 / 物語の見どころ</p>
+          <h2>41.2 <span>小鳥守</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">ドキドキハラハラする物語の見どころ</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>小鳥守</li><li>山雷頤</li><li>命がけ,リアクション芸</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「物語の見どころ」です。枠の説明は「ドキドキハラハラする物語の見どころ」。ここに 41.2 のソース項目 「小鳥守」 / 「山雷頤」 / 「命がけ,リアクション芸」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>命がけ,リアクション芸<br>「命がけっぽく見える」だけでいい。その姿は、命がけ以上に<br>命がけっぽく見える。期待されてバンジージャンプを飛ぶと、<br>英雄になれる。ひとりでこっそりバンジージャンプしても意味は<br>ない。カメラに撮られている常態で「やりたくないよ〜」と言い<br>ながら落ちていくと、大きいギャラになる。</p>
+        <p class="source-pdf">【41~48】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face H / 土星 / 観客を惹きつける装飾</p>
+          <h2>15.2 <span>イマジネーション</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">観客を惹きつける物語の装飾</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>イマジネーション</li><li>地風升</li><li>スター誕生,夢のような人生の始まり</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「観客を惹きつける装飾」です。枠の説明は「観客を惹きつける物語の装飾」。ここに 15.2 のソース項目 「イマジネーション」 / 「地風升」 / 「スター誕生,夢のような人生の始まり」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>スター誕生,夢のような人生の始まり<br>「体感覚」のエネルギーが「イマジネーション」の方に向くと<br>いうことは、夢がかなう瞬間のコト。<br>「スター誕生」って、<br>「スター誕生<br>夢のような、素晴らしい人生の始まりになる瞬間。<br>。</p>
+        <p class="source-pdf">【9~16】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face I / 天王星 / 魂が選んだ動機</p>
+          <h2>51.3 <span>歓喜</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">この物語を魂が選んだ動機</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>歓喜</li><li>雷火豊</li><li>愛の電氣ウナギ</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「魂が選んだ動機」です。枠の説明は「この物語を魂が選んだ動機」。ここに 51.3 のソース項目 「歓喜」 / 「雷火豊」 / 「愛の電氣ウナギ」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>愛の電氣ウナギ<br>何かの作品を作る時や、形に起こしていく時のアイコン。ビ<br>リビリって痺れさせる。受け取る側が、悪いエネルギーと感<br>じたのなら「敵」、愛であれば「夢や希望」となる。このエモー<br>ショナルなエネルギー信号が、<br>「桃パフェ」みたいな強いヒット<br>商品を作る要となる。</p>
+        <p class="source-pdf">【49~56】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face J / 海王星 / 主演映画</p>
+          <h2>57.6 <span>黒魔術</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">これまで地球に来て演じた主演映画</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>黒魔術</li><li>水風井</li><li>伝説の名器のバイオリン</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「主演映画」です。枠の説明は「これまで地球に来て演じた主演映画」。ここに 57.6 のソース項目 「黒魔術」 / 「水風井」 / 「伝説の名器のバイオリン」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>伝説の名器のバイオリン<br>「刹那」が「黒魔術」の方向というのは、時空を超えるという<br>こと。音速や、赤外線通信のように、圧縮してデータを飛ば<br>すという意味。ベートーベンと同じ時代の音である、ストラ<br>ディバリウス（バイオリン）の音色を聞くと、</p>
+        <p class="source-pdf">【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+
+    <article class="frame ok">
+      <header>
+        <div>
+          <p class="eyebrow">Face K / 冥王星 / ナレーション・神通力</p>
+          <h2>58.5 <span>ブラックシンデレラ</span></h2>
+        </div>
+        <div class="badges">
+          <span class="status">source-backed</span>
+          <span class="status review-status">reviewed · 1.00</span>
+        </div>
+      </header>
+      <p class="role">物語を俯瞰した位置からの説明</p>
+      
+      <div class="terms">
+        <h3>Source Terms</h3>
+        <ul><li>ブラックシンデレラ</li><li>雷沢帰妹</li><li>らい−たく−きまい［ブラックシンデレラ］</li></ul>
+      </div>
+      <div class="explanation">
+        <h3>根拠にもとづく読み替え</h3>
+        <p>この枠は「ナレーション・神通力」です。枠の説明は「物語を俯瞰した位置からの説明」。ここに 58.5 のソース項目 「ブラックシンデレラ」 / 「雷沢帰妹」 / 「らい−たく−きまい［ブラックシンデレラ］」 を割り当てます。<br>上記以外の意味づけはローカルPDF本文からは追加しません。</p>
+      </div>
+      <details>
+        <summary>根拠本文抜粋</summary>
+        <p>らい−たく−きまい［ブラックシンデレラ］</p>
+        <p class="source-pdf">【57~64】エモーショナルミミクリー〜感情的擬態運命の演出ハンドブック〜_1.0.pdf</p>
+      </details>
+    </article>
+    
+      </div>
+    </section>
+    
+  </main>
+</body>
+</html>

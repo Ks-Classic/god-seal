@@ -1,0 +1,10 @@
+# Python env / cache
+.venv/
+__pycache__/
+*.pyc
+
+# Source handbook PDFs: large (~350MB total) & copyrighted input — keep local only
+*.pdf
+
+# OS
+.DS_Store

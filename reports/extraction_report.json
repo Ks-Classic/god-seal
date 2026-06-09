@@ -1,0 +1,21 @@
+{
+  "extractor": "pymupdf_bbox",
+  "pdf_count": 10,
+  "vector_entry_count": 383,
+  "expected_vector_entry_count": 384,
+  "complete_entry_count_including_placeholders": 384,
+  "duplicate_codes": [],
+  "missing_codes": [
+    "18.3"
+  ],
+  "warning_count": 1,
+  "warnings": [
+    {
+      "code": "18.3",
+      "source_pdf": "",
+      "warnings": [
+        "source_entry_missing"
+      ]
+    }
+  ]
+}
