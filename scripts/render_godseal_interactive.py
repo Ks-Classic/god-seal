@@ -115,6 +115,62 @@ FACE_EDGES = [
 NODE_R = 27
 
 
+# 八卦の意味（出典: はじまり「八卦」ページ・原文ママ）。三爻グリフは標準ユニコード。
+BAGUA = [
+    ("☰", "天", "人の世"),
+    ("☱", "沢", "人の加意"),
+    ("☲", "火", "無情"),
+    ("☳", "雷", "信号"),
+    ("☴", "風", "時と場"),
+    ("☵", "水", "夢と現"),
+    ("☶", "山", "物の理"),
+    ("☷", "地", "世の理"),
+]
+
+
+def build_reading_html() -> str:
+    """読み方ガイド（GODSEAL公式の読み方）。すべて data/READING_METHOD.md = 原典に根拠。"""
+    bagua_rows = "".join(
+        f'<div class="lg-row"><span class="lg-glyph">{g}</span>'
+        f'<span class="lg-planet">{name}</span>'
+        f'<span class="lg-role"><b>{meaning}</b></span></div>'
+        for g, name, meaning in BAGUA
+    )
+    return (
+        '<div class="d-accent">はじめに · 読み方</div>'
+        '<div class="d-planet">この本は「答え」ではなく「手掛かり」</div>'
+        '<div class="d-role">GODSEAL 公式の読み方（原典より）</div>'
+        '<div class="d-roledesc">'
+        '各位置の解説文は“答え”ではありません。原典はこう明言します——'
+        '「本書のエモーショナルミミクリー語録は、その手掛かりを探すための言葉である」'
+        '「正解はない、『私』だけが辿り着く『体験』だけが『こたえ』」。'
+        '読んで答えが出ないのは設計どおり。手掛かりとして読み、最後は体験で立ち上げます。'
+        '</div>'
+        '<div class="d-section-k">① まず構造を認識する</div>'
+        '<div class="d-body">数字＝易経、惑星＝生命の樹。\n'
+        '・大きい数字＝InGod（本卦／元の卦, 1–64）\n'
+        '・小さい数字＝vector（動く爻, 1–6・下から上へ）\n'
+        '・表示の卦名＝之卦（爻が動いた結果）。∵ の数字はその King Wen 番号。\n'
+        'MARIA＝操縦プログラム（あなたの戦略・ゲーム）／'
+        'FACE＝車のボディ＝他者から見える物語。\n'
+        '「MARIA のアクセルを踏み込めば、FACE が自動運転のように機能する」。</div>'
+        '<div class="d-section-k">八卦の意味 — 卦を構成する8要素（原文ママ）</div>'
+        f'<div class="legend">{bagua_rows}</div>'
+        '<div class="d-section-k">② 手掛かりとして読む</div>'
+        '<div class="d-body">語録・卦・惑星の役割は、あなたを言い当てる“答え”ではなく、'
+        '「感情の常態」を思い出すための手掛かり。すべては「認識する」ことから始まります。\n'
+        '（おわり）「ここで示される言葉は答えではありません。'
+        'あなたの答えは…内側から湧き上がってくるものです。」</div>'
+        '<div class="d-section-k">③ 体験で読む（エモーショナルミミクリー）</div>'
+        '<div class="d-body">「常態の再現の場に身を置いてみる。それがエモーショナルミミクリー」。\n'
+        'GODSEAL が指し示す“感情が状態として息をしている全体像”を再現し、'
+        'エネルギーが寸分なく再現されたその時、全身の細胞の奥から魂の記憶がよみがえる'
+        '——というのが原典の示す方法です。</div>'
+        '<div class="d-source"><span class="lab">出典 · 【はじまり】／【おわり】'
+        'エモーショナルミミクリー（全文は data/READING_METHOD.md）</span></div>'
+    )
+
+
 def source_short(pdf_name: str) -> str:
     match = re.match(r"(【[^】]*】)", pdf_name or "")
     return match.group(1) if match else (pdf_name or "")
@@ -203,6 +259,7 @@ def render(interp: dict[str, Any]) -> str:
         source_image=source_image,
         payload=payload,
         algo_payload=algo_payload,
+        reading_html=build_reading_html(),
         maria_svg=maria_svg,
         face_svg=face_svg,
     )
@@ -260,6 +317,17 @@ header.masthead {{ text-align: center; margin-bottom: clamp(28px, 5vw, 56px); }}
 .wordmark .seal {{ display: inline-block; padding: 0 0.12em; }}
 .subject {{ font-family: var(--serif); font-style: italic; font-size: clamp(18px, 2.4vw, 26px); color: var(--ink); }}
 .subject small {{ font-style: normal; font-family: var(--sans); font-weight: 300; color: var(--ink-dim); letter-spacing: 0.2em; font-size: 12px; display: block; margin-top: 8px; }}
+.read-btn {{ margin: 18px auto 0; display: inline-flex; align-items: center; gap: 9px; cursor: pointer;
+  font-family: var(--sans); font-weight: 400; font-size: 12px; letter-spacing: 0.1em; color: var(--ink);
+  background: linear-gradient(180deg, rgba(233,201,128,0.10), rgba(159,199,232,0.08));
+  border: 1px solid var(--line); border-radius: 999px; padding: 9px 18px;
+  transition: border-color 0.25s var(--ease), background 0.25s, transform 0.25s; }}
+.read-btn .rb-i {{ color: var(--maria); font-size: 14px; }}
+.read-btn:hover, .read-btn:focus-visible {{ outline: none; border-color: rgba(233,201,128,0.5);
+  background: linear-gradient(180deg, rgba(233,201,128,0.16), rgba(159,199,232,0.12)); transform: translateY(-1px); }}
+.detail[data-algo="guide"] .d-accent, .detail[data-algo="guide"] .lg-glyph {{ color: var(--maria); }}
+.detail[data-algo="guide"] .d-planet {{ color: var(--ink); }}
+.detail[data-algo="guide"] {{ border-left-color: rgba(233,201,128,0.35); }}
 
 .stage {{ display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 40px); align-items: start; }}
 @media (max-width: 880px) {{ .stage {{ grid-template-columns: 1fr; }} }}
@@ -432,6 +500,9 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
     <div class="eyebrow">Star Navigation System · Moonshot Incarnation Interface</div>
     <h1 class="wordmark"><span class="seal">GOD&nbsp;SEAL</span></h1>
     <div class="subject">木幡 靖彦 <small>SOURCE · {source_image}</small></div>
+    <button class="read-btn" type="button" id="readBtn" aria-label="読み方ガイドを開く">
+      <span class="rb-i">☞</span> 読み方 — この本は「答え」ではなく「手掛かり」
+    </button>
   </header>
 
   <main class="stage">
@@ -464,6 +535,7 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
 
 <script id="data" type="application/json">{payload}</script>
 <script id="algoData" type="application/json">{algo_payload}</script>
+<script id="readingTpl" type="text/html">{reading_html}</script>
 <script>
 (function () {{
   const DATA = JSON.parse(document.getElementById("data").textContent);
@@ -558,6 +630,12 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
     openDrawer();
   }}
 
+  function renderReading() {{
+    detail.setAttribute("data-algo", "guide");
+    detailBody.innerHTML = document.getElementById("readingTpl").innerHTML;
+    openDrawer();
+  }}
+
   function openDrawer() {{
     detail.classList.add("open");
     detail.setAttribute("aria-hidden", "false");
@@ -624,6 +702,13 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
       hideTip();
       renderAlgo(btn.getAttribute("data-algo-info"));
     }});
+  }});
+
+  var readBtn = document.getElementById("readBtn");
+  if (readBtn) readBtn.addEventListener("click", function () {{
+    if (activeNode) {{ activeNode.classList.remove("is-active"); activeNode = null; }}
+    hideTip();
+    renderReading();
   }});
 
   closeBtn.addEventListener("click", close);
