@@ -254,6 +254,7 @@ def build_frame_result(section: str, frame: dict[str, Any], schema: dict[str, An
         "role": frame_schema["role"],
         "role_description": frame_schema["role_description"],
         "position_title": frame_schema.get("title", ""),
+        "position_detail": frame_schema.get("detail", ""),
         "code": code,
         "read_confidence": frame_read_confidence(frame),
         "needs_review": frame_needs_review(frame),
@@ -292,11 +293,13 @@ def build_frame_result(section: str, frame: dict[str, Any], schema: dict[str, An
 def build_chart_result(reading: dict[str, Any]) -> dict[str, Any]:
     entries = load_entries()
     schema = load_schema()
+    full_schema = load_json(DATA_DIR / "frame_schema.json")
     return {
         "source_image": reading.get("source_image", "unknown"),
         "reading_method": reading.get("reading_method", "unknown"),
         "review_threshold": reading.get("review_threshold", 0.95),
         "boundary": "local GODSEAL source data only",
+        "reading_procedure": full_schema.get("reading_procedure", {}),
         "maria": [build_frame_result("maria", frame, schema, entries) for frame in reading["maria"]],
         "face": [build_frame_result("face", frame, schema, entries) for frame in reading["face"]],
     }

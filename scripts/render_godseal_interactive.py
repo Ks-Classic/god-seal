@@ -128,8 +128,22 @@ BAGUA = [
 ]
 
 
-def build_reading_html() -> str:
+def build_reading_html(procedure: dict[str, Any] | None = None) -> str:
     """読み方ガイド（GODSEAL公式の読み方）。すべて data/READING_METHOD.md = 原典に根拠。"""
+    proc_html = ""
+    if procedure and procedure.get("steps"):
+        steps = "".join(
+            f'<div class="proc-step"><span class="proc-n">{i + 1}</span>'
+            f'<span class="proc-t">{escape(step)}</span></div>'
+            for i, step in enumerate(procedure["steps"])
+        )
+        note = escape(procedure.get("notation_example", ""))
+        proc_html = (
+            '<div class="d-section-k">読み解き手順（コンパイル）'
+            ' <span class="verify-tag">写真転記・要検証</span></div>'
+            f'<div class="proc">{steps}</div>'
+            + (f'<div class="d-body" style="color:var(--ink-dim);font-size:13px">{note}</div>' if note else "")
+        )
     bagua_rows = "".join(
         f'<div class="lg-row"><span class="lg-glyph">{g}</span>'
         f'<span class="lg-planet">{name}</span>'
@@ -166,6 +180,7 @@ def build_reading_html() -> str:
         'GODSEAL が指し示す“感情が状態として息をしている全体像”を再現し、'
         'エネルギーが寸分なく再現されたその時、全身の細胞の奥から魂の記憶がよみがえる'
         '——というのが原典の示す方法です。</div>'
+        + proc_html +
         '<div class="d-source"><span class="lab">出典 · 【はじまり】／【おわり】'
         'エモーショナルミミクリー（全文は data/READING_METHOD.md）</span></div>'
     )
@@ -187,6 +202,7 @@ def build_node_data(frames: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
             "role": fr.get("role", ""),
             "role_description": fr.get("role_description", ""),
             "position_title": fr.get("position_title", ""),
+            "position_detail": fr.get("position_detail", ""),
             "code": fr.get("code", ""),
             "ingod": str(fr.get("ingod", "")),
             "vector": str(fr.get("vector", "")),
@@ -259,7 +275,7 @@ def render(interp: dict[str, Any]) -> str:
         source_image=source_image,
         payload=payload,
         algo_payload=algo_payload,
-        reading_html=build_reading_html(),
+        reading_html=build_reading_html(interp.get("reading_procedure")),
         maria_svg=maria_svg,
         face_svg=face_svg,
     )
@@ -383,6 +399,17 @@ header.masthead {{ text-align: center; margin-bottom: clamp(28px, 5vw, 56px); }}
 .lg-role {{ display: block; }}
 .lg-role b {{ font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--ink); letter-spacing: 0.04em; }}
 .lg-role span {{ display: block; font-family: var(--read); font-size: 11.5px; line-height: 1.55; color: var(--ink-dim); margin-top: 2px; }}
+
+/* 要検証タグ・位置の詳説・読み手順 */
+.verify-tag {{ font-family: var(--sans); font-weight: 400; font-size: 9px; letter-spacing: 0.08em;
+  color: #e7b86a; border: 1px solid rgba(231,184,106,0.4); border-radius: 999px; padding: 2px 7px;
+  margin-left: 8px; vertical-align: middle; text-transform: none; }}
+.d-detail {{ border-left: 2px solid rgba(231,184,106,0.35); padding-left: 12px; }}
+.proc {{ display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }}
+.proc-step {{ display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: start;
+  padding: 9px 10px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--line); }}
+.proc-n {{ font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--maria); text-align: center; }}
+.proc-t {{ font-family: var(--read); font-size: 13px; line-height: 1.7; color: #f1ede4; }}
 
 .tree {{ width: 100%; height: auto; display: block; overflow: visible; }}
 .tree .edges line {{ stroke: var(--line); stroke-width: 1; }}
@@ -567,6 +594,10 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
     html += '<div class="d-role">' + esc(d.role) + "</div>";
     if (d.role_description) html += '<div class="d-roledesc">' + esc(d.role_description) + "</div>";
     if (d.position_title) html += '<div class="d-title">「' + esc(d.position_title) + "」</div>";
+    if (d.position_detail) {{
+      html += '<div class="d-section-k">この位置の詳説 <span class="verify-tag">写真転記・要検証</span></div>';
+      html += '<div class="d-body d-detail">' + esc(d.position_detail) + "</div>";
+    }}
     html += '<div class="d-rule"></div>';
     html += '<div class="d-code"><span class="num">' + esc(d.code) + '</span><span class="hex">' + esc(d.hexagram) + "</span></div>";
     if (d.reading) html += '<div class="d-reading">' + esc(d.reading) + "</div>";
