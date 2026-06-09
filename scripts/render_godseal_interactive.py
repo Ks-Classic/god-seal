@@ -35,6 +35,41 @@ PLANET_GLYPH = {
     "冥王星": "♇",
 }
 
+# MARIA/FACE アルゴリズム全体の説明。すべて【はじまり】PDF本文に根拠を持つ
+# (推測・創作はしない)。各位置の役割は data/frame_schema.json (出典画像由来)。
+ALGO_INFO = {
+    "maria": {
+        "name": "Maria",
+        "kicker": "操縦プログラム — 才能の戦略",
+        "concept": (
+            "MARIA は、あなたがこの地球ゲームを“どう操縦するか”の設計図。"
+            "11 の位置（惑星）が、ゲームのどの要素にあたるかを表す"
+            "（ジャンル・コントローラー・必殺スキル…）。"
+        ),
+        "metaphor": (
+            "FACE は車のボディ、MARIA は操縦プログラム。"
+            "MARIA のアクセルを踏み込めば、FACE が自動運転のように機能する。"
+        ),
+        "source_quote": "「MARIA のゲーム、FACE の物語は、『認識する』ことから始まる。」",
+        "source": "【はじまり】エモーショナルミミクリー",
+    },
+    "face": {
+        "name": "Face",
+        "kicker": "車のボディ — 他者から見える物語",
+        "concept": (
+            "FACE は、他者から見える“あなたという物語”。"
+            "11 の位置（惑星）が、物語のどの要素にあたるかを表す"
+            "（テーマ・タイトル・主人公の魅力・主演映画…）。"
+        ),
+        "metaphor": (
+            "FACE は車のボディ、MARIA は操縦プログラム。"
+            "MARIA のアクセルを踏み込めば、FACE が自動運転のように機能する。"
+        ),
+        "source_quote": "「Face は 他者から見える物語」",
+        "source": "【はじまり】エモーショナルミミクリー",
+    },
+}
+
 # viewBox 0 0 320 560. x: center=160 left=78 right=242. 8 vertical levels.
 LV = [46, 112, 178, 244, 310, 376, 442, 508]
 CX, LX, RX = 160, 78, 242
@@ -158,6 +193,7 @@ def render(interp: dict[str, Any]) -> str:
     maria = build_node_data(interp.get("maria", []))
     face = build_node_data(interp.get("face", []))
     payload = json.dumps({"maria": maria, "face": face}, ensure_ascii=False)
+    algo_payload = json.dumps(ALGO_INFO, ensure_ascii=False)
     source_image = escape(interp.get("source_image", ""))
 
     maria_svg = svg_tree("maria", MARIA_POS, MARIA_EDGES, maria)
@@ -166,6 +202,7 @@ def render(interp: dict[str, Any]) -> str:
     return TEMPLATE.format(
         source_image=source_image,
         payload=payload,
+        algo_payload=algo_payload,
         maria_svg=maria_svg,
         face_svg=face_svg,
     )
@@ -230,13 +267,54 @@ header.masthead {{ text-align: center; margin-bottom: clamp(28px, 5vw, 56px); }}
 .algo {{ position: relative; border: 1px solid var(--line); border-radius: 18px; padding: 22px 14px 30px;
   background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0)); overflow: hidden; }}
 .algo[data-algo="face"] {{ background: linear-gradient(180deg, rgba(0,0,0,0.34), rgba(0,0,0,0.12)); }}
-.algo-head {{ display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 6px; }}
+.algo-head {{ display: flex; align-items: baseline; justify-content: center; gap: 12px; margin: 0 auto 6px;
+  background: none; border: none; padding: 6px 14px; cursor: pointer; border-radius: 12px;
+  transition: background 0.25s var(--ease); }}
 .algo-head .k {{ font-family: var(--sans); font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase;
   font-size: 10px; color: var(--ink-dim); }}
-.algo-head .n {{ font-family: var(--serif); font-size: clamp(30px, 4.4vw, 48px); font-weight: 500; letter-spacing: 0.04em; }}
+.algo-head .n {{ font-family: var(--serif); font-size: clamp(30px, 4.4vw, 48px); font-weight: 500; letter-spacing: 0.04em;
+  border-bottom: 1px solid transparent; transition: border-color 0.25s; }}
 .algo[data-algo="maria"] .algo-head .n {{ color: var(--maria); }}
 .algo[data-algo="face"] .algo-head .n {{ color: var(--face); }}
+.algo-head .info-dot {{ font-size: 13px; color: var(--ink-dim); align-self: center; opacity: 0.6;
+  transition: opacity 0.25s, color 0.25s; }}
+.algo-head:hover, .algo-head:focus-visible {{ background: rgba(255,255,255,0.04); outline: none; }}
+.algo-head:hover .info-dot, .algo-head:focus-visible .info-dot {{ opacity: 1; }}
+.algo[data-algo="maria"] .algo-head:hover .n, .algo[data-algo="maria"] .algo-head:focus-visible .n {{ border-color: var(--maria); }}
+.algo[data-algo="face"] .algo-head:hover .n, .algo[data-algo="face"] .algo-head:focus-visible .n {{ border-color: var(--face); }}
+.algo[data-algo="maria"] .algo-head:hover .info-dot {{ color: var(--maria); }}
+.algo[data-algo="face"] .algo-head:hover .info-dot {{ color: var(--face); }}
 .algo-note {{ text-align: center; font-size: 11px; color: var(--ink-dim); letter-spacing: 0.12em; margin-bottom: 8px; }}
+
+/* hover tooltip — planet + 位置の意味 */
+.tip {{ position: fixed; z-index: 40; max-width: 264px; pointer-events: none; opacity: 0;
+  transform: translateY(4px); transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
+  background: rgba(14,14,22,0.94); border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55); padding: 11px 14px; backdrop-filter: blur(10px); }}
+.tip.show {{ opacity: 1; transform: none; }}
+.tip[data-algo="maria"] {{ border-color: rgba(233,201,128,0.4); }}
+.tip[data-algo="face"] {{ border-color: rgba(159,199,232,0.4); }}
+.tip .tip-head {{ display: flex; align-items: baseline; gap: 8px; }}
+.tip .tip-glyph {{ font-family: var(--serif); font-size: 20px; line-height: 1; }}
+.tip[data-algo="maria"] .tip-glyph {{ color: var(--maria); }}
+.tip[data-algo="face"] .tip-glyph {{ color: var(--face); }}
+.tip .tip-planet {{ font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink); }}
+.tip .tip-role {{ font-family: var(--sans); font-size: 11px; color: var(--ink-dim); letter-spacing: 0.06em; margin-left: auto; }}
+.tip .tip-desc {{ font-family: var(--read); font-size: 12px; line-height: 1.6; color: #e9e5dc; margin-top: 6px; }}
+.tip .tip-code {{ font-family: var(--serif); font-size: 11px; color: var(--ink-dim); margin-top: 7px; letter-spacing: 0.08em; }}
+
+/* algorithm overview legend (11 positions) */
+.legend {{ display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }}
+.lg-row {{ display: grid; grid-template-columns: 22px 64px 1fr; align-items: baseline; gap: 8px;
+  padding: 7px 8px; border-radius: 8px; }}
+.lg-row:nth-child(odd) {{ background: rgba(255,255,255,0.022); }}
+.lg-glyph {{ font-family: var(--serif); font-size: 16px; text-align: center; }}
+.detail[data-algo="maria"] .lg-glyph {{ color: var(--maria); }}
+.detail[data-algo="face"] .lg-glyph {{ color: var(--face); }}
+.lg-planet {{ font-family: var(--serif); font-size: 14px; color: var(--ink); }}
+.lg-role {{ display: block; }}
+.lg-role b {{ font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--ink); letter-spacing: 0.04em; }}
+.lg-role span {{ display: block; font-family: var(--read); font-size: 11.5px; line-height: 1.55; color: var(--ink-dim); margin-top: 2px; }}
 
 .tree {{ width: 100%; height: auto; display: block; overflow: visible; }}
 .tree .edges line {{ stroke: var(--line); stroke-width: 1; }}
@@ -358,12 +436,16 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
 
   <main class="stage">
     <section class="algo" data-algo="maria">
-      <div class="algo-head"><span class="k">Algorithm</span><span class="n">Maria</span></div>
+      <button class="algo-head" type="button" data-algo-info="maria" aria-label="Maria アルゴリズムの全体説明を開く">
+        <span class="k">Algorithm</span><span class="n">Maria</span><span class="info-dot">ⓘ</span>
+      </button>
       <div class="algo-note">才能の戦略 — どう世界をプレイするか</div>
       {maria_svg}
     </section>
     <section class="algo" data-algo="face">
-      <div class="algo-head"><span class="k">Algorithm</span><span class="n">Face</span></div>
+      <button class="algo-head" type="button" data-algo-info="face" aria-label="Face アルゴリズムの全体説明を開く">
+        <span class="k">Algorithm</span><span class="n">Face</span><span class="info-dot">ⓘ</span>
+      </button>
       <div class="algo-note">他者から見える物語 — どう演じられるか</div>
       {face_svg}
     </section>
@@ -377,18 +459,23 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
   <button class="close" id="closeBtn" aria-label="閉じる">×</button>
   <div id="detailBody"></div>
 </aside>
-<div class="hint" id="hint">円をクリックして詳細を表示</div>
+<div class="hint" id="hint">円・惑星にマウス／タップで意味、クリックで詳細。MARIA・FACE 名で全体説明</div>
+<div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
 
 <script id="data" type="application/json">{payload}</script>
+<script id="algoData" type="application/json">{algo_payload}</script>
 <script>
 (function () {{
   const DATA = JSON.parse(document.getElementById("data").textContent);
+  const ALGO_INFO = JSON.parse(document.getElementById("algoData").textContent);
   const detail = document.getElementById("detail");
   const detailBody = document.getElementById("detailBody");
   const scrim = document.getElementById("scrim");
   const hint = document.getElementById("hint");
+  const tip = document.getElementById("tip");
   const closeBtn = document.getElementById("closeBtn");
   let activeNode = null;
+  const ORDER = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
 
   function esc(s) {{
     return String(s == null ? "" : s)
@@ -439,11 +526,72 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
         toggle.textContent = open ? "原本を閉じる ▴" : "原本を見る ▾";
       }});
     }}
+    openDrawer();
+  }}
+
+  function renderAlgo(algo) {{
+    const info = ALGO_INFO[algo];
+    if (!info) return;
+    detail.setAttribute("data-algo", algo);
+    let legend = "";
+    ORDER.forEach(function (pid) {{
+      const d = DATA[algo] && DATA[algo][pid];
+      if (!d) return;
+      legend += '<div class="lg-row"><span class="lg-glyph">' + esc(d.glyph) + "</span>"
+        + '<span class="lg-planet">' + esc(d.planet) + "</span>"
+        + '<span class="lg-role"><b>' + esc(d.role) + "</b><span>" + esc(d.role_description)
+        + "</span></span></div>";
+    }});
+    let html = "";
+    html += '<div class="d-accent">Algorithm · ' + esc(info.name) + "</div>";
+    html += '<div class="d-planet">' + esc(info.name) + "</div>";
+    html += '<div class="d-role">' + esc(info.kicker) + "</div>";
+    html += '<div class="d-roledesc">' + esc(info.concept) + "</div>";
+    html += '<div class="d-title">「' + esc(info.metaphor) + "」</div>";
+    html += '<div class="d-rule"></div>';
+    html += '<div class="d-section-k">11 の位置 · 惑星と意味</div>';
+    html += '<div class="legend">' + legend + "</div>";
+    html += '<div class="d-source"><span class="lab">出典 · ' + esc(info.source) + "</span></div>";
+    html += '<div class="d-body" style="margin-top:10px;font-style:italic;color:var(--ink-dim)">'
+      + esc(info.source_quote) + "</div>";
+    detailBody.innerHTML = html;
+    openDrawer();
+  }}
+
+  function openDrawer() {{
     detail.classList.add("open");
     detail.setAttribute("aria-hidden", "false");
     scrim.classList.add("show");
     hint.classList.add("hide");
   }}
+
+  // hover tooltip: 惑星 + 位置の意味
+  function showTip(node) {{
+    const algo = node.getAttribute("data-algo");
+    const pid = node.getAttribute("data-pid");
+    const d = DATA[algo] && DATA[algo][pid];
+    if (!d) return;
+    tip.setAttribute("data-algo", algo);
+    tip.innerHTML =
+      '<div class="tip-head"><span class="tip-glyph">' + esc(d.glyph) + "</span>"
+      + '<span class="tip-planet">' + esc(d.planet) + "</span>"
+      + '<span class="tip-role">' + esc(d.role) + "</span></div>"
+      + '<div class="tip-desc">' + esc(d.role_description) + "</div>"
+      + '<div class="tip-code">' + esc(d.code) + (d.hexagram ? " · " + esc(d.hexagram) : "") + "</div>";
+    tip.classList.add("show");
+    positionTip(node);
+  }}
+  function positionTip(node) {{
+    const r = node.getBoundingClientRect();
+    const t = tip.getBoundingClientRect();
+    let x = r.left + r.width / 2 - t.width / 2;
+    let y = r.top - t.height - 12;
+    x = Math.max(8, Math.min(x, window.innerWidth - t.width - 8));
+    if (y < 8) y = r.bottom + 12;
+    tip.style.left = x + "px";
+    tip.style.top = y + "px";
+  }}
+  function hideTip() {{ tip.classList.remove("show"); }}
 
   function close() {{
     detail.classList.remove("open");
@@ -457,17 +605,31 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
       if (activeNode) activeNode.classList.remove("is-active");
       node.classList.add("is-active");
       activeNode = node;
+      hideTip();
       render(node.getAttribute("data-algo"), node.getAttribute("data-pid"));
     }}
     node.addEventListener("click", activate);
     node.addEventListener("keydown", function (e) {{
       if (e.key === "Enter" || e.key === " ") {{ e.preventDefault(); activate(); }}
     }});
+    node.addEventListener("mouseenter", function () {{ showTip(node); }});
+    node.addEventListener("mouseleave", hideTip);
+    node.addEventListener("focus", function () {{ showTip(node); }});
+    node.addEventListener("blur", hideTip);
+  }});
+
+  document.querySelectorAll("[data-algo-info]").forEach(function (btn) {{
+    btn.addEventListener("click", function () {{
+      if (activeNode) {{ activeNode.classList.remove("is-active"); activeNode = null; }}
+      hideTip();
+      renderAlgo(btn.getAttribute("data-algo-info"));
+    }});
   }});
 
   closeBtn.addEventListener("click", close);
   scrim.addEventListener("click", close);
-  document.addEventListener("keydown", function (e) {{ if (e.key === "Escape") close(); }});
+  window.addEventListener("scroll", hideTip, {{ passive: true }});
+  document.addEventListener("keydown", function (e) {{ if (e.key === "Escape") {{ close(); hideTip(); }} }});
 }})();
 </script>
 </body>
