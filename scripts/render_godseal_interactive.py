@@ -20,6 +20,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = ROOT / "data"
 
 PLANET_GLYPH = {
     "太陽": "☉",
@@ -266,6 +267,25 @@ def render(interp: dict[str, Any]) -> str:
     face = build_node_data(interp.get("face", []))
     payload = json.dumps({"maria": maria, "face": face}, ensure_ascii=False)
     algo_payload = json.dumps(ALGO_INFO, ensure_ascii=False)
+
+    # InGod(1-64)の意味: 公式サイト 64卦イメージワード。Vector(1-6)の意味: 写真転記(要検証)。
+    ingod_raw = json.loads((DATA_DIR / "ingod_meanings.json").read_text(encoding="utf-8"))
+    vector_raw = json.loads((DATA_DIR / "vector_meanings.json").read_text(encoding="utf-8"))
+    ingod_payload = json.dumps(
+        {
+            "source": ingod_raw.get("source", ""),
+            "byNum": {str(e["ingod"]): e for e in ingod_raw["entries"]},
+        },
+        ensure_ascii=False,
+    )
+    vector_payload = json.dumps(
+        {
+            "source": vector_raw.get("source", ""),
+            "status": vector_raw.get("status", ""),
+            "byNum": {str(e["vector"]): e for e in vector_raw["entries"]},
+        },
+        ensure_ascii=False,
+    )
     source_image = escape(interp.get("source_image", ""))
 
     maria_svg = svg_tree("maria", MARIA_POS, MARIA_EDGES, maria)
@@ -275,6 +295,8 @@ def render(interp: dict[str, Any]) -> str:
         source_image=source_image,
         payload=payload,
         algo_payload=algo_payload,
+        ingod_payload=ingod_payload,
+        vector_payload=vector_payload,
         reading_html=build_reading_html(interp.get("reading_procedure")),
         maria_svg=maria_svg,
         face_svg=face_svg,
@@ -410,6 +432,37 @@ header.masthead {{ text-align: center; margin-bottom: clamp(28px, 5vw, 56px); }}
   padding: 9px 10px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--line); }}
 .proc-n {{ font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--maria); text-align: center; }}
 .proc-t {{ font-family: var(--read); font-size: 13px; line-height: 1.7; color: #f1ede4; }}
+
+/* タップ可能なコード数字 + InGod/Vector 展開ボックス */
+.d-code .num {{ display: inline-flex; align-items: baseline; }}
+.d-code .dot {{ font-family: var(--serif); font-size: 34px; font-weight: 600; margin: 0 1px; }}
+.code-part {{ font-family: var(--serif); font-size: 34px; font-weight: 600; color: var(--ink);
+  background: none; border: none; padding: 0 3px; cursor: pointer; border-bottom: 2px dotted rgba(233,201,128,0.55);
+  transition: color 0.2s, border-color 0.2s; line-height: 1.1; }}
+.code-part:hover, .code-part:focus-visible {{ outline: none; }}
+.detail[data-algo="maria"] .code-part:hover, .detail[data-algo="maria"] .code-part:focus-visible {{ color: var(--maria); border-bottom-style: solid; }}
+.detail[data-algo="face"] .code-part:hover, .detail[data-algo="face"] .code-part:focus-visible {{ color: var(--face); border-bottom-style: solid; }}
+.code-hint {{ font-family: var(--sans); font-size: 10px; color: var(--ink-dim); letter-spacing: 0.06em; margin-top: 5px; opacity: 0.8; }}
+.num-detail:empty {{ display: none; }}
+.nd-box {{ margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
+  background: rgba(255,255,255,0.03); animation: srcReveal 0.35s var(--ease); }}
+.nd-box[data-kind="ingod"] {{ border-left: 2px solid rgba(233,201,128,0.5); }}
+.nd-box[data-kind="vector"] {{ border-left: 2px solid rgba(159,199,232,0.5); }}
+.nd-k {{ font-family: var(--sans); font-weight: 300; letter-spacing: 0.22em; text-transform: uppercase;
+  font-size: 9.5px; color: var(--ink-dim); }}
+.nd-title {{ font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--ink); margin-top: 6px; }}
+.nd-hex {{ font-size: 14px; font-weight: 500; color: var(--ink-dim); margin-left: 6px; }}
+.nd-body {{ font-family: var(--read); font-size: 13px; line-height: 1.85; color: #f1ede4; margin-top: 8px; }}
+.nd-body.dim {{ color: var(--ink-dim); }}
+.nd-sub {{ font-family: var(--sans); font-weight: 400; font-size: 10px; letter-spacing: 0.2em;
+  color: var(--ink-dim); margin-top: 12px; text-transform: uppercase; }}
+.nd-kw {{ font-family: var(--read); font-size: 12px; line-height: 1.8; color: var(--ink-dim); margin-top: 7px; }}
+.nd-attrs {{ display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; margin-top: 12px; }}
+.nd-ar {{ display: flex; justify-content: space-between; gap: 8px; font-size: 11px; padding: 5px 8px;
+  border-radius: 7px; background: rgba(0,0,0,0.25); }}
+.nd-ar span {{ color: var(--ink-dim); font-family: var(--sans); }}
+.nd-ar b {{ color: var(--ink); font-weight: 500; font-family: var(--read); text-align: right; }}
+.nd-src {{ font-family: var(--sans); font-size: 10px; color: var(--ink-dim); opacity: 0.75; margin-top: 12px; letter-spacing: 0.05em; }}
 
 .tree {{ width: 100%; height: auto; display: block; overflow: visible; }}
 .tree .edges line {{ stroke: var(--line); stroke-width: 1; }}
@@ -562,11 +615,15 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
 
 <script id="data" type="application/json">{payload}</script>
 <script id="algoData" type="application/json">{algo_payload}</script>
+<script id="ingodData" type="application/json">{ingod_payload}</script>
+<script id="vectorData" type="application/json">{vector_payload}</script>
 <script id="readingTpl" type="text/html">{reading_html}</script>
 <script>
 (function () {{
   const DATA = JSON.parse(document.getElementById("data").textContent);
   const ALGO_INFO = JSON.parse(document.getElementById("algoData").textContent);
+  const INGOD = JSON.parse(document.getElementById("ingodData").textContent);
+  const VECTOR = JSON.parse(document.getElementById("vectorData").textContent);
   const detail = document.getElementById("detail");
   const detailBody = document.getElementById("detailBody");
   const scrim = document.getElementById("scrim");
@@ -599,7 +656,13 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
       html += '<div class="d-body d-detail">' + esc(d.position_detail) + "</div>";
     }}
     html += '<div class="d-rule"></div>';
-    html += '<div class="d-code"><span class="num">' + esc(d.code) + '</span><span class="hex">' + esc(d.hexagram) + "</span></div>";
+    html += '<div class="d-code"><span class="num">'
+      + '<button class="code-part" type="button" data-open-ingod="' + esc(d.ingod) + '" aria-label="InGod ' + esc(d.ingod) + ' の意味を開く">' + esc(d.ingod) + "</button>"
+      + '<span class="dot">.</span>'
+      + '<button class="code-part" type="button" data-open-vector="' + esc(d.vector) + '" aria-label="Vector ' + esc(d.vector) + ' の意味を開く">' + esc(d.vector) + "</button>"
+      + '</span><span class="hex">' + esc(d.hexagram) + "</span></div>";
+    html += '<div class="code-hint">数字をタップ → 大きい数字（InGod）・小さい数字（Vector）それぞれの意味</div>';
+    html += '<div class="num-detail" data-num-detail></div>';
     if (d.reading) html += '<div class="d-reading">' + esc(d.reading) + "</div>";
     if (d.label) html += '<span class="d-label">' + esc(d.label) + "</span>";
     if (kw) html += '<div class="d-keywords">' + kw + "</div>";
@@ -629,7 +692,64 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
         toggle.textContent = open ? "原本を閉じる ▴" : "原本を見る ▾";
       }});
     }}
+    wireNumberButtons();
     openDrawer();
+  }}
+
+  function ingodHtml(n) {{
+    const g = INGOD.byNum[String(n)];
+    if (!g) return '<div class="nd-box">InGod ' + esc(n) + ' の意味データがありません。</div>';
+    return '<div class="nd-box" data-kind="ingod">'
+      + '<div class="nd-k">InGod ' + esc(n) + ' — 大きい数字の意味（本卦）</div>'
+      + '<div class="nd-title">' + esc(g.image_word) + ' <span class="nd-hex">' + esc(g.hexagram) + "</span></div>"
+      + '<div class="nd-kw">' + esc(g.keywords) + "</div>"
+      + '<div class="nd-src">出典 · 公式サイト「64卦イメージワード」(dnadesignlabo.com)</div>'
+      + "</div>";
+  }}
+
+  function vectorHtml(v) {{
+    const g = VECTOR.byNum[String(v)];
+    if (!g) return '<div class="nd-box">Vector ' + esc(v) + ' の意味データがありません。</div>';
+    let attrs = "";
+    if (g.attributes) {{
+      attrs = '<div class="nd-attrs">';
+      Object.keys(g.attributes).forEach(function (k) {{
+        attrs += '<div class="nd-ar"><span>' + esc(k) + "</span><b>" + esc(g.attributes[k]) + "</b></div>";
+      }});
+      attrs += "</div>";
+    }}
+    return '<div class="nd-box" data-kind="vector">'
+      + '<div class="nd-k">Vector ' + esc(v) + ' — 小さい数字の意味 <span class="verify-tag">写真転記・要検証</span></div>'
+      + '<div class="nd-title">「' + esc(g.headline) + '」</div>'
+      + '<div class="nd-body">' + esc(g.body) + "</div>"
+      + '<div class="nd-sub">注意する点</div><div class="nd-body dim">' + esc(g.cautions) + "</div>"
+      + '<div class="nd-sub">キーワード</div><div class="nd-kw">' + esc(g.keywords) + "</div>"
+      + attrs
+      + '<div class="nd-src">出典 · ハンドブック「ベクトル一覧」見開き（写真）</div>'
+      + "</div>";
+  }}
+
+  function wireNumberButtons() {{
+    const box = detailBody.querySelector("[data-num-detail]");
+    if (!box) return;
+    let current = "";
+    function toggleBox(kind, val, html) {{
+      const key = kind + ":" + val;
+      if (current === key) {{ box.innerHTML = ""; current = ""; return; }}
+      box.innerHTML = html;
+      current = key;
+      box.scrollIntoView({{ behavior: "smooth", block: "nearest" }});
+    }}
+    detailBody.querySelectorAll("[data-open-ingod]").forEach(function (b) {{
+      b.addEventListener("click", function () {{
+        toggleBox("ingod", b.getAttribute("data-open-ingod"), ingodHtml(b.getAttribute("data-open-ingod")));
+      }});
+    }});
+    detailBody.querySelectorAll("[data-open-vector]").forEach(function (b) {{
+      b.addEventListener("click", function () {{
+        toggleBox("vector", b.getAttribute("data-open-vector"), vectorHtml(b.getAttribute("data-open-vector")));
+      }});
+    }});
   }}
 
   function renderAlgo(algo) {{
