@@ -255,6 +255,7 @@ def build_frame_result(section: str, frame: dict[str, Any], schema: dict[str, An
         "role_description": frame_schema["role_description"],
         "position_title": frame_schema.get("title", ""),
         "position_detail": frame_schema.get("detail", ""),
+        "ingod_body": None,  # 後で注入
         "code": code,
         "read_confidence": frame_read_confidence(frame),
         "needs_review": frame_needs_review(frame),

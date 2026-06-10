@@ -699,11 +699,17 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
   function ingodHtml(n) {{
     const g = INGOD.byNum[String(n)];
     if (!g) return '<div class="nd-box">InGod ' + esc(n) + ' の意味データがありません。</div>';
+    let body = '';
+    if (g.body) {{
+      body = '<div class="nd-sub">詳細説明</div><div class="nd-body">' + esc(g.body) + "</div>";
+    }}
     return '<div class="nd-box" data-kind="ingod">'
       + '<div class="nd-k">InGod ' + esc(n) + ' — 大きい数字の意味（本卦）</div>'
       + '<div class="nd-title">' + esc(g.image_word) + ' <span class="nd-hex">' + esc(g.hexagram) + "</span></div>"
+      + '<div class="nd-sub">キーワード</div>'
       + '<div class="nd-kw">' + esc(g.keywords) + "</div>"
-      + '<div class="nd-src">出典 · 公式サイト「64卦イメージワード」(dnadesignlabo.com)</div>'
+      + body
+      + '<div class="nd-src">出典 · ハンドブック「感情的擬態 運命の演出」(PDF)</div>'
       + "</div>";
   }}
 
