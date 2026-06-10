@@ -464,6 +464,17 @@ header.masthead {{ text-align: center; margin-bottom: clamp(28px, 5vw, 56px); }}
 .nd-ar b {{ color: var(--ink); font-weight: 500; font-family: var(--read); text-align: right; }}
 .nd-src {{ font-family: var(--sans); font-size: 10px; color: var(--ink-dim); opacity: 0.75; margin-top: 12px; letter-spacing: 0.05em; }}
 
+/* クリッカブル要素: 惑星・役割 */
+.tap-detail {{ background: none; border: none; padding: 0; cursor: pointer; display: flex; gap: 8px;
+  align-items: center; transition: opacity 0.15s; font-family: inherit; font-size: inherit; }}
+.detail[data-algo="maria"] .tap-detail {{ color: inherit; }}
+.detail[data-algo="maria"] .tap-detail:hover {{ opacity: 0.7; }}
+.detail[data-algo="maria"] .tap-detail:active {{ opacity: 0.5; }}
+.detail[data-algo="face"] .tap-detail {{ color: inherit; }}
+.detail[data-algo="face"] .tap-detail:hover {{ opacity: 0.7; }}
+.d-planet .tap-detail, .d-role .tap-detail {{ border-bottom: 1px dotted currentColor; padding-bottom: 2px; }}
+.nd-combined {{ border-left: 3px solid rgba(200,200,200,0.3); }}
+
 .tree {{ width: 100%; height: auto; display: block; overflow: visible; }}
 .tree .edges line {{ stroke: var(--line); stroke-width: 1; }}
 .tree[data-algo="maria"] .edges line {{ stroke: rgba(233,201,128,0.18); }}
@@ -754,6 +765,20 @@ footer {{ text-align: center; margin-top: 60px; font-size: 10px; letter-spacing:
     detailBody.querySelectorAll("[data-open-vector]").forEach(function (b) {{
       b.addEventListener("click", function () {{
         toggleBox("vector", b.getAttribute("data-open-vector"), vectorHtml(b.getAttribute("data-open-vector")));
+      }});
+    }});
+    // 惑星/役割ボタン: コード全体の詳細を展開
+    detailBody.querySelectorAll("[data-code]").forEach(function (b) {{
+      b.addEventListener("click", function (e) {{
+        e.stopPropagation();
+        const code = b.getAttribute("data-code");
+        const [ingod, vector] = code.split(".");
+        const html = '<div class="nd-box nd-combined">'
+          + '<div class="nd-k">この位置の詳細（InGod' + esc(ingod) + ' & Vector' + esc(vector) + '）</div>'
+          + ingodHtml(ingod)
+          + vectorHtml(vector)
+          + "</div>";
+        toggleBox("detail", code, html);
       }});
     }});
   }}
